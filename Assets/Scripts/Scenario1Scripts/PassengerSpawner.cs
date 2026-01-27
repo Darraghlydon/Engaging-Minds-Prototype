@@ -6,6 +6,7 @@ public class PassengerSpawner : MonoBehaviour
 {
     [Header("Minimum passengers that must remain")]
     [SerializeField] private int minPassengersToKeep = 2;
+    [SerializeField] private NoiseManager noiseManager;
 
     private readonly HashSet<Passenger> activePassengers = new();
 
@@ -60,9 +61,12 @@ public class PassengerSpawner : MonoBehaviour
         var p = Instantiate(passengerPrefab, chosenSpawn.position, chosenSpawn.rotation);
         p.Init(seatManager, frontExit, backExit, this);
         Register(p);
+        noiseManager.Register(p);
 
         if (!seatManager.TryClaimRandomSeat(p, out var seat))
         {
+            Unregister(p);
+            noiseManager.Unregister(p);
             Destroy(p.gameObject);
             return;
         }
@@ -80,10 +84,12 @@ public class PassengerSpawner : MonoBehaviour
             p.Init(seatManager, frontExit, backExit, this);
 
             Register(p);
+            noiseManager.Register(p);
 
             if (!seatManager.TryClaimRandomSeat(p, out var seat))
             {
                 Unregister(p);
+                noiseManager.Unregister(p);
                 Destroy(p.gameObject);
                 return;
             }

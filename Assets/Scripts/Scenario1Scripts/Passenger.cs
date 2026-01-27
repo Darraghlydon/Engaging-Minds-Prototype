@@ -4,8 +4,16 @@ using UnityEngine.AI;
 
 public class Passenger : MonoBehaviour
 {
-    public enum State { Entering, WalkingToSeat, Seated, Leaving }
+    public enum State { WalkingToSeat, Seated, Leaving }
     public State state;
+
+    [Header("Noise Indicator")]
+    [SerializeField] private GameObject speechBubble; // assign in inspector
+
+    public bool IsNoisy { get; private set; }
+
+    public bool IsEligibleForNoise =>
+        state == State.Seated && !IsNoisy;   // simple rule for now
 
     [Header("Leave Timing")]
     [SerializeField] private float seatedTimeMin = 6f;
@@ -24,6 +32,7 @@ public class Passenger : MonoBehaviour
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        speechBubble.SetActive(false);
     }
 
 
@@ -48,7 +57,23 @@ public class Passenger : MonoBehaviour
         StartCoroutine(SeatedRoutine());
     }
 
+    public void SetNoisy(bool noisy)
+    {
+        IsNoisy = noisy;
+        if (speechBubble != null)
+            speechBubble.SetActive(noisy);
+    }
 
+    public void Silence()
+    {
+        SetNoisy(false);
+        // Later: trigger your minigame here or via a manager
+    }
+
+    public void OnBeginLeaving()
+    {
+        SetNoisy(false); 
+    }
     public void WalkToSeat(Seat targetSeat)
     {
         seat = targetSeat;
@@ -70,7 +95,7 @@ public class Passenger : MonoBehaviour
         }
         else if (state == State.Leaving && agent.enabled && !agent.pathPending)
         {
-            if (agent.remainingDistance <= agent.stoppingDistance + 0.1f)
+            if (agent.remainingDistance <= agent.stoppingDistance + 0.2f)
             {
                 Destroy(gameObject); // or return to pool
             }
@@ -106,8 +131,10 @@ public class Passenger : MonoBehaviour
 
     private void LeaveViaRandomExit()
     {
-        // 🔹 Remove from active count immediately
+
+        // Remove from active count immediately
         spawner?.Unregister(this);
+        OnBeginLeaving();
 
         // Free the seat
         if (seatManager != null && seat != null)
