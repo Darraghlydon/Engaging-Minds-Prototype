@@ -6,6 +6,7 @@ public class SeatManager : MonoBehaviour
 {
     [SerializeField] private List<Seat> seats = new();
 
+    public IEnumerable<Seat> AllSeats => seats;
     public int FreeSeatCount => seats.Count(s => !s.IsOccupied);
 
     public bool TryClaimRandomSeat(Passenger p, out Seat seat)
@@ -25,6 +26,4 @@ public class SeatManager : MonoBehaviour
     {
         if (seat != null) seat.Release(p);
     }
-
-    public IEnumerable<Seat> AllSeats => seats;
 }

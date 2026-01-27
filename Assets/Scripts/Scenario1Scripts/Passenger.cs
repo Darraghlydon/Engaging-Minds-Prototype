@@ -1,3 +1,4 @@
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,8 +7,15 @@ public class Passenger : MonoBehaviour
     public enum State { Entering, WalkingToSeat, Seated, Leaving }
     public State state;
 
+    [Header("Leave Timing")]
+    [SerializeField] private float seatedTimeMin = 6f;
+    [SerializeField] private float seatedTimeMax = 15f;
+
     private NavMeshAgent agent;
     private SeatManager seatManager;
+
+    private Transform frontExit;
+    private Transform backExit;
 
     public Seat seat { get; private set; }
 
@@ -16,19 +24,25 @@ public class Passenger : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    public void Init(SeatManager manager)
+    public void Init(SeatManager manager, Transform frontExit, Transform backExit)
     {
         seatManager = manager;
+        this.frontExit = frontExit;
+        this.backExit = backExit;
     }
+
 
     public void StartSeated(Seat startSeat)
     {
         seat = startSeat;
         state = State.Seated;
 
-        agent.enabled = false; // seated = no nav movement
+        agent.enabled = false;
         transform.SetPositionAndRotation(seat.sitPoint.position, seat.sitPoint.rotation);
+
+        StartCoroutine(SeatedRoutine());
     }
+
 
     public void WalkToSeat(Seat targetSeat)
     {
@@ -49,7 +63,15 @@ public class Passenger : MonoBehaviour
                 SitDown();
             }
         }
+        else if (state == State.Leaving && agent.enabled && !agent.pathPending)
+        {
+            if (agent.remainingDistance <= agent.stoppingDistance + 0.1f)
+            {
+                Destroy(gameObject); // swap for pool later
+            }
+        }
     }
+
 
     private void SitDown()
     {
@@ -58,12 +80,22 @@ public class Passenger : MonoBehaviour
         agent.enabled = false;
 
         transform.SetPositionAndRotation(seat.sitPoint.position, seat.sitPoint.rotation);
-        // Optional: play sit anim here
+        StartCoroutine(SeatedRoutine());
     }
 
-    public void LeaveAndExit(Transform exitPoint)
+
+    private IEnumerator SeatedRoutine()
     {
-        // Release seat as soon as they commit to leaving (prevents blocking spawns)
+        float wait = Random.Range(seatedTimeMin, seatedTimeMax);
+        yield return new WaitForSeconds(wait);
+
+        if (state != State.Seated) yield break;
+        LeaveViaRandomExit();
+    }
+
+    private void LeaveViaRandomExit()
+    {
+        // Free the seat immediately
         if (seatManager != null && seat != null)
             seatManager.ReleaseSeat(seat, this);
 
@@ -72,7 +104,13 @@ public class Passenger : MonoBehaviour
 
         if (!agent.enabled) agent.enabled = true;
         agent.isStopped = false;
-        agent.SetDestination(exitPoint.position);
+
+        Transform exit = GetRandomExit();
+        agent.SetDestination(exit.position);
+    }
+
+    private Transform GetRandomExit()
+    {
+        return Random.value < 0.5f ? frontExit : backExit;
     }
 }
-

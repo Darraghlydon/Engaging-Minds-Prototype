@@ -150,7 +150,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassengerSpawner
   seatManager: {fileID: 1381763616}
   passengerPrefab: {fileID: 1305173041578956677, guid: 189d4035029f19a46b76620d07e53b02, type: 3}
+  frontSpawn: {fileID: 331894568}
+  backSpawn: {fileID: 1723753137}
+  frontExit: {fileID: 331894568}
+  backExit: {fileID: 1723753137}
   startSeatedCount: 2
+  spawnIntervalMin: 3
+  spawnIntervalMax: 8
 --- !u!4 &228401110
 Transform:
   m_ObjectHideFlags: 0
@@ -161,6 +167,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -2.692}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &331894567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 331894568}
+  m_Layer: 0
+  m_Name: Front Exit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &331894568
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331894567}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -179,6 +216,7 @@ GameObject:
   - component: {fileID: 377587411}
   - component: {fileID: 377587410}
   - component: {fileID: 377587413}
+  - component: {fileID: 377587414}
   m_Layer: 0
   m_Name: Seat 4
   m_TagString: Untagged
@@ -295,6 +333,26 @@ MonoBehaviour:
   approachPoint: {fileID: 962205851}
   sitPoint: {fileID: 377587409}
   occupant: {fileID: 0}
+--- !u!114 &377587414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377587408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &623254317
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,8 +662,8 @@ Transform:
   m_GameObject: {fileID: 663926067}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.9848, y: -0, z: 1.7671}
+  m_LocalScale: {x: 0.36077082, y: 1, z: 0.7083156}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -825,6 +883,7 @@ GameObject:
   - component: {fileID: 1437724749}
   - component: {fileID: 1437724748}
   - component: {fileID: 1437724751}
+  - component: {fileID: 1437724752}
   m_Layer: 0
   m_Name: Seat 2
   m_TagString: Untagged
@@ -941,6 +1000,26 @@ MonoBehaviour:
   approachPoint: {fileID: 1075889123}
   sitPoint: {fileID: 1437724747}
   occupant: {fileID: 0}
+--- !u!114 &1437724752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437724746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &1555331029
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,6 +1147,37 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &1723753136
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1723753137}
+  m_Layer: 0
+  m_Name: Back Exit
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1723753137
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723753136}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1740172514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,6 +1191,7 @@ GameObject:
   - component: {fileID: 1740172517}
   - component: {fileID: 1740172516}
   - component: {fileID: 1740172519}
+  - component: {fileID: 1740172520}
   m_Layer: 0
   m_Name: Seat 1
   m_TagString: Untagged
@@ -1197,6 +1308,26 @@ MonoBehaviour:
   approachPoint: {fileID: 1914582284}
   sitPoint: {fileID: 1740172515}
   occupant: {fileID: 0}
+--- !u!114 &1740172520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740172514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &1833665168
 GameObject:
   m_ObjectHideFlags: 0
@@ -1478,6 +1609,7 @@ GameObject:
   - component: {fileID: 2146348365}
   - component: {fileID: 2146348364}
   - component: {fileID: 2146348367}
+  - component: {fileID: 2146348368}
   m_Layer: 0
   m_Name: Seat 3
   m_TagString: Untagged
@@ -1594,6 +1726,26 @@ MonoBehaviour:
   approachPoint: {fileID: 623254318}
   sitPoint: {fileID: 2146348363}
   occupant: {fileID: 0}
+--- !u!114 &2146348368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146348362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1609,3 +1761,5 @@ SceneRoots:
   - {fileID: 1057985668}
   - {fileID: 1381763617}
   - {fileID: 228401110}
+  - {fileID: 331894568}
+  - {fileID: 1723753137}
