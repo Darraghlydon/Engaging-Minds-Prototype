@@ -23,12 +23,13 @@ public class ReactionMinigameController : MonoBehaviour
         if (panelRoot != null) panelRoot.SetActive(false);
     }
 
-    void OnEnable()
+    private void Start()
     {
         InputManager.Instance.Actions.UI.Interact.performed += OnInteractPerformed;
     }
 
-    void OnDisable()
+
+    void OnDestroy()
     {
         if(InputManager.Instance != null)
         {
