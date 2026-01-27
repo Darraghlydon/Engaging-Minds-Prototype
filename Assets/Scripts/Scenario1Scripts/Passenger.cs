@@ -17,6 +17,8 @@ public class Passenger : MonoBehaviour
     private Transform frontExit;
     private Transform backExit;
 
+    private PassengerSpawner spawner;
+
     public Seat seat { get; private set; }
 
     void Awake()
@@ -24,11 +26,14 @@ public class Passenger : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    public void Init(SeatManager manager, Transform frontExit, Transform backExit)
+
+
+    public void Init(SeatManager manager, Transform frontExit, Transform backExit, PassengerSpawner spawner)
     {
         seatManager = manager;
         this.frontExit = frontExit;
         this.backExit = backExit;
+        this.spawner = spawner;
     }
 
 
@@ -67,7 +72,7 @@ public class Passenger : MonoBehaviour
         {
             if (agent.remainingDistance <= agent.stoppingDistance + 0.1f)
             {
-                Destroy(gameObject); // swap for pool later
+                Destroy(gameObject); // or return to pool
             }
         }
     }
@@ -86,16 +91,25 @@ public class Passenger : MonoBehaviour
 
     private IEnumerator SeatedRoutine()
     {
-        float wait = Random.Range(seatedTimeMin, seatedTimeMax);
-        yield return new WaitForSeconds(wait);
+        while (state == State.Seated)
+        {
+            yield return new WaitForSeconds(Random.Range(seatedTimeMin, seatedTimeMax));
+            if (state != State.Seated) yield break;
 
-        if (state != State.Seated) yield break;
-        LeaveViaRandomExit();
+            if (spawner != null && spawner.CanAnyPassengerLeave())
+            {
+                LeaveViaRandomExit();
+                yield break;
+            }
+        }
     }
 
     private void LeaveViaRandomExit()
     {
-        // Free the seat immediately
+        // 🔹 Remove from active count immediately
+        spawner?.Unregister(this);
+
+        // Free the seat
         if (seatManager != null && seat != null)
             seatManager.ReleaseSeat(seat, this);
 

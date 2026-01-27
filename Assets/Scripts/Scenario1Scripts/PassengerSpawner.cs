@@ -1,8 +1,24 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PassengerSpawner : MonoBehaviour
 {
+    [Header("Minimum passengers that must remain")]
+    [SerializeField] private int minPassengersToKeep = 2;
+
+    private readonly HashSet<Passenger> activePassengers = new();
+
+    public bool CanAnyPassengerLeave()
+    {
+        return activePassengers.Count > minPassengersToKeep;
+    }
+
+    public void Register(Passenger p) => activePassengers.Add(p);
+    public void Unregister(Passenger p) => activePassengers.Remove(p);
+
+    public int ActiveCount => activePassengers.Count;
+
     [Header("References")]
     [SerializeField] private SeatManager seatManager;
     [SerializeField] private Passenger passengerPrefab;
@@ -17,8 +33,8 @@ public class PassengerSpawner : MonoBehaviour
     [SerializeField] private int startSeatedCount = 2;
 
     [Header("Spawning")]
-    [SerializeField] private float spawnIntervalMin = 3f;
-    [SerializeField] private float spawnIntervalMax = 8f;
+    [SerializeField] private float spawnIntervalMin = 30f;
+    [SerializeField] private float spawnIntervalMax = 60f;
 
     void Start()
     {
@@ -42,7 +58,8 @@ public class PassengerSpawner : MonoBehaviour
         Transform chosenSpawn = Random.value < 0.5f ? frontSpawn : backSpawn;
 
         var p = Instantiate(passengerPrefab, chosenSpawn.position, chosenSpawn.rotation);
-        p.Init(seatManager, frontExit, backExit);
+        p.Init(seatManager, frontExit, backExit, this);
+        Register(p);
 
         if (!seatManager.TryClaimRandomSeat(p, out var seat))
         {
@@ -60,10 +77,13 @@ public class PassengerSpawner : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             var p = Instantiate(passengerPrefab);
-            p.Init(seatManager, frontExit, backExit);
+            p.Init(seatManager, frontExit, backExit, this);
+
+            Register(p);
 
             if (!seatManager.TryClaimRandomSeat(p, out var seat))
             {
+                Unregister(p);
                 Destroy(p.gameObject);
                 return;
             }
