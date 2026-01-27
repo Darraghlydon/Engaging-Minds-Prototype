@@ -10,13 +10,6 @@ public class ReactionMinigameController : MonoBehaviour
     [SerializeField] private RectTransform zoneRect;   // SuccessZone rect
     [SerializeField] private RectTransform arrowRect;  // Arrow rect
 
-    [Header("Input")]
-    [SerializeField] private InputActionReference interactAction;
-
-    // Optional: disable your normal gameplay action map while minigame runs
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private string gameplayActionMapName = "Player"; // change to yours
-
     private Action<bool> onComplete;
     private ReactionMinigameProfile profile;
 
@@ -32,25 +25,26 @@ public class ReactionMinigameController : MonoBehaviour
 
     void OnEnable()
     {
-        if (interactAction != null)
-            interactAction.action.performed += OnInteractPerformed;
+        InputManager.Instance.Actions.UI.Interact.performed += OnInteractPerformed;
     }
 
     void OnDisable()
     {
-        if (interactAction != null)
-            interactAction.action.performed -= OnInteractPerformed;
+        if(InputManager.Instance != null)
+        {
+            InputManager.Instance.Actions.UI.Interact.performed -= OnInteractPerformed;
+        }
+        
     }
 
     public void Show(ReactionMinigameProfile profile, Action<bool> onComplete)
     {
-        SetActionMap("Player", false);
-        SetActionMap("UI", true);
+        InputManager.Instance.SwitchToUI();
 
         this.profile = profile;
         this.onComplete = onComplete;
 
-        t = UnityEngine.Random.value; // random start feels nicer than always bottom
+        t = UnityEngine.Random.value; 
         dir = 1f;
         elapsed = 0f;
         running = true;
@@ -59,11 +53,6 @@ public class ReactionMinigameController : MonoBehaviour
 
         if (panelRoot != null) panelRoot.SetActive(true);
 
-        // Disable gameplay map so Interact doesn't also trigger other gameplay things
-        SetGameplayEnabled(false);
-
-        // Make sure interact action is enabled
-        interactAction?.action.Enable();
     }
 
     private void End(bool success)
@@ -71,8 +60,9 @@ public class ReactionMinigameController : MonoBehaviour
         if (!running) return;
         running = false;
 
+        InputManager.Instance.SwitchToPlayer();
+
         if (panelRoot != null) panelRoot.SetActive(false);
-        SetGameplayEnabled(true);
 
         var cb = onComplete;
         onComplete = null;
@@ -85,7 +75,7 @@ public class ReactionMinigameController : MonoBehaviour
     {
         if (!running || profile == null) return;
 
-        // Move arrow up/down (ping-pong bounce)
+        // Move arrow up/down
         float delta = profile.speed * Time.unscaledDeltaTime; // unscaled for UI minigame
         t += dir * delta;
 
@@ -101,15 +91,6 @@ public class ReactionMinigameController : MonoBehaviour
             if (elapsed >= profile.timeLimit)
                 End(false);
         }
-    }
-
-    private void SetActionMap(string mapName, bool enabled)
-    {
-        var map = inputActions.FindActionMap(mapName, true);
-        if (map == null) return;
-
-        if (enabled) map.Enable();
-        else map.Disable();
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext ctx)
@@ -148,16 +129,4 @@ public class ReactionMinigameController : MonoBehaviour
         arrowRect.anchoredPosition = Vector2.zero;
     }
 
-    private void SetGameplayEnabled(bool enabled)
-    {
-        SetActionMap("UI", false);
-        SetActionMap("Player", true);
-        if (inputActions == null || string.IsNullOrEmpty(gameplayActionMapName)) return;
-
-        var map = inputActions.FindActionMap(gameplayActionMapName, true);
-        if (map == null) return;
-
-        if (enabled) map.Enable();
-        else map.Disable();
-    }
 }
