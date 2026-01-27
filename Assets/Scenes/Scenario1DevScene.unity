@@ -152,7 +152,11 @@ MonoBehaviour:
   barRect: {fileID: 690818037}
   zoneRect: {fileID: 1254539361}
   arrowRect: {fileID: 956494275}
-  interactAction: {fileID: 0}
+  profile: {fileID: 0}
+  t: 0
+  dir: 1
+  elapsed: 0
+  running: 0
 --- !u!4 &81586840
 Transform:
   m_ObjectHideFlags: 0
@@ -675,12 +679,14 @@ MonoBehaviour:
     Style: 1
     Time: 2
     CustomCurve:
-      serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+  m_OutputCamera: {fileID: 632201581}
+  m_TargetOverride: {fileID: 0}
+  m_LastFrameUpdated: 16
 --- !u!114 &632201584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1220,7 +1226,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.06666667
+  m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 1ca6a95197ddb194893e0dbf4a0c2efe, type: 2}
   m_BuildHeightMesh: 0
@@ -2034,13 +2040,16 @@ MonoBehaviour:
     Enabled: 0
     m_Value: 0
   OutputChannel: 1
+  ActivationId: 1
+  m_QueuePriority: 0
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
-  Target:
-    TrackingTarget: {fileID: 0}
-    LookAtTarget: {fileID: 0}
-    CustomLookAtTarget: 0
+  <Extensions>k__BackingField: []
+  <PreviousStateIsValid>k__BackingField: 0
+  <FollowTargetChanged>k__BackingField: 1
+  <LookAtTargetChanged>k__BackingField: 1
+  Target: {TrackingTarget: {fileID: 0}, LookAtTarget: {fileID: 0}, CustomLookAtTarget: 0}
   Lens:
     FieldOfView: 80
     OrthographicSize: 10
@@ -2060,7 +2069,16 @@ MonoBehaviour:
       Curvature: {x: 2, y: 11}
       BarrelClipping: 0.25
       Anamorphism: 0
+    m_OrthoFromCamera: 0
+    m_PhysicalFromCamera: 0
+    m_AspectFromCamera: 0.9558824
+    m_SourceCamera: {fileID: 632201581}
   BlendHint: 0
+  m_Pipeline:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1887756249
 GameObject:
   m_ObjectHideFlags: 0
@@ -2219,7 +2237,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControlFPS
   playerSpeed: 2
   lookSensitivity: 0.1
+  _moveDirection: {x: 0, y: 0, z: 0}
+  _myTransform: {fileID: 0}
   _myCameraTransform: {fileID: 1833665169}
+  _myController: {fileID: 0}
+  _xRotation: 0
+  _yRotation: 0
+  passengerInteractor: {fileID: 0}
 --- !u!195 &1887756257
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2256,7 +2280,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassengerInteractor
   interactRange: 1
   passengerMask:
-    serializedVersion: 2
     m_Bits: 64
   minigame: {fileID: 81586839}
   defaultProfile: {fileID: 11400000, guid: f022c9a81c461c24a8e9d0a4f4701eef, type: 2}
