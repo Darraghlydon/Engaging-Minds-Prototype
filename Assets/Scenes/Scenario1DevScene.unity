@@ -410,7 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8f0d109a68a4b4396a53e824cb3e9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassengerSpawner
-  _minPassengersToKeep: 2
+  _minPassengersToKeep: 4
   _noiseManager: {fileID: 820786731}
   _seatManager: {fileID: 1381763616}
   _passengerPrefab: {fileID: 1305173041578956677, guid: 189d4035029f19a46b76620d07e53b02, type: 3}
@@ -418,7 +418,7 @@ MonoBehaviour:
   _backSpawn: {fileID: 1723753137}
   _frontExit: {fileID: 331894568}
   _backExit: {fileID: 1723753137}
-  startSeatedCount: 4
+  startSeatedCount: 5
   _spawnIntervalMin: 30
   _spawnIntervalMax: 60
 --- !u!4 &228401110
