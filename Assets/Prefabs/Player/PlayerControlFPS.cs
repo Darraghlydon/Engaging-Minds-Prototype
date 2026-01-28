@@ -12,10 +12,10 @@ public class PlayerControlFPS : MonoBehaviour
     
     [Header("Movement Variables")] 
     [SerializeField]
-    private float playerSpeed = 2.0f;
+    private float _playerSpeed = 2.0f;
 
     [SerializeField] 
-    private float lookSensitivity;
+    private float _lookSensitivity;
   
     private Vector3 _moveDirection;
     private Transform _myTransform;
@@ -24,7 +24,8 @@ public class PlayerControlFPS : MonoBehaviour
     private CharacterController _myController;
     private float _xRotation;
     private float _yRotation;
-    PassengerInteractor passengerInteractor;
+    private float _lockedY;
+    private PassengerInteractor _passengerInteractor;
 
 
     private void Awake()
@@ -32,7 +33,7 @@ public class PlayerControlFPS : MonoBehaviour
         _playerActions = InputManager.Instance.Actions;
         _playerActions.Player.Interact.performed += OnInteract;
 
-        passengerInteractor = GetComponent<PassengerInteractor>();
+        _passengerInteractor = GetComponent<PassengerInteractor>();
     }
 
     // Start is called before the first frame update
@@ -40,13 +41,16 @@ public class PlayerControlFPS : MonoBehaviour
     {
         _myController = GetComponent<CharacterController>();
         _myTransform = transform;
+        InputManager.Instance.SwitchToPlayer();
+        Cursor.lockState = CursorLockMode.Locked;
+        _lockedY = transform.position.y;
         //_myCameraTransform = GetComponentInChildren<Camera>().transform;
     }
 
     void OnInteract(InputAction.CallbackContext context)
     {
         Debug.Log("Interact!");
-        passengerInteractor.TryInteract();
+        _passengerInteractor.TryInteract();
     }
 
     // Update is called once per frame
@@ -54,6 +58,14 @@ public class PlayerControlFPS : MonoBehaviour
     { 
         HandleMovement();
         HandleLook();
+        LockYPosition();
+    }
+
+    private void LockYPosition()
+    {
+        Vector3 pos = _myTransform.position;
+        pos.y = _lockedY;
+        _myTransform.position = pos;
     }
 
     private void HandleMovement()
@@ -61,7 +73,7 @@ public class PlayerControlFPS : MonoBehaviour
         Vector2 moveVector = _playerActions.Player.Move.ReadValue<Vector2>();
         _moveDirection = new Vector3(moveVector.x, 0, moveVector.y);
         _moveDirection = _myTransform.TransformDirection(_moveDirection);
-        _myController.Move((_moveDirection * (playerSpeed * Time.deltaTime)));
+        _myController.Move((_moveDirection * (_playerSpeed * Time.deltaTime)));
     }
 
     private void HandleLook()
@@ -69,10 +81,10 @@ public class PlayerControlFPS : MonoBehaviour
         Vector2 lookVector = _playerActions.Player.Look.ReadValue<Vector2>();
 
         
-        _yRotation += lookVector.x * lookSensitivity;
+        _yRotation += lookVector.x * _lookSensitivity;
         
         //The xrotation is subtracted to prevent inverted looking
-        _xRotation -= lookVector.y * lookSensitivity;
+        _xRotation -= lookVector.y * _lookSensitivity;
 
         //Prevent the player from looking too far up or down
         _xRotation = Mathf.Clamp(_xRotation, -90.0f, 90.0f);

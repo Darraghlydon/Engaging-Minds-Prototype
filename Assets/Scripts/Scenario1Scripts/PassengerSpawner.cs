@@ -5,14 +5,14 @@ using UnityEngine;
 public class PassengerSpawner : MonoBehaviour
 {
     [Header("Minimum passengers that must remain")]
-    [SerializeField] private int minPassengersToKeep = 2;
-    [SerializeField] private NoiseManager noiseManager;
+    [SerializeField] private int _minPassengersToKeep = 2;
+    [SerializeField] private NoiseManager _noiseManager;
 
     private readonly HashSet<Passenger> activePassengers = new();
 
     public bool CanAnyPassengerLeave()
     {
-        return activePassengers.Count > minPassengersToKeep;
+        return activePassengers.Count > _minPassengersToKeep;
     }
 
     public void Register(Passenger p) => activePassengers.Add(p);
@@ -21,21 +21,21 @@ public class PassengerSpawner : MonoBehaviour
     public int ActiveCount => activePassengers.Count;
 
     [Header("References")]
-    [SerializeField] private SeatManager seatManager;
-    [SerializeField] private Passenger passengerPrefab;
+    [SerializeField] private SeatManager _seatManager;
+    [SerializeField] private Passenger _passengerPrefab;
 
     [Header("Spawn/Exit Points")]
-    [SerializeField] private Transform frontSpawn;
-    [SerializeField] private Transform backSpawn;
-    [SerializeField] private Transform frontExit;
-    [SerializeField] private Transform backExit;
+    [SerializeField] private Transform _frontSpawn;
+    [SerializeField] private Transform _backSpawn;
+    [SerializeField] private Transform _frontExit;
+    [SerializeField] private Transform _backExit;
 
     [Header("Starting Setup")]
     [SerializeField] private int startSeatedCount = 2;
 
     [Header("Spawning")]
-    [SerializeField] private float spawnIntervalMin = 30f;
-    [SerializeField] private float spawnIntervalMax = 60f;
+    [SerializeField] private float _spawnIntervalMin = 30f;
+    [SerializeField] private float _spawnIntervalMax = 60f;
 
     void Start()
     {
@@ -47,26 +47,26 @@ public class PassengerSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(spawnIntervalMin, spawnIntervalMax));
+            yield return new WaitForSeconds(Random.Range(_spawnIntervalMin, _spawnIntervalMax));
             TrySpawnOne();
         }
     }
 
     private void TrySpawnOne()
     {
-        if (seatManager.FreeSeatCount <= 0) return;
+        if (_seatManager.FreeSeatCount <= 0) return;
 
-        Transform chosenSpawn = Random.value < 0.5f ? frontSpawn : backSpawn;
+        Transform chosenSpawn = Random.value < 0.5f ? _frontSpawn : _backSpawn;
 
-        var p = Instantiate(passengerPrefab, chosenSpawn.position, chosenSpawn.rotation);
-        p.Init(seatManager, frontExit, backExit, this);
+        var p = Instantiate(_passengerPrefab, chosenSpawn.position, chosenSpawn.rotation);
+        p.Init(_seatManager, _frontExit, _backExit, this);
         Register(p);
-        noiseManager.Register(p);
+        _noiseManager.Register(p);
 
-        if (!seatManager.TryClaimRandomSeat(p, out var seat))
+        if (!_seatManager.TryClaimRandomSeat(p, out var seat))
         {
             Unregister(p);
-            noiseManager.Unregister(p);
+            _noiseManager.Unregister(p);
             Destroy(p.gameObject);
             return;
         }
@@ -76,20 +76,20 @@ public class PassengerSpawner : MonoBehaviour
 
     private void SpawnStartingSeatedPassengers()
     {
-        int count = Mathf.Clamp(startSeatedCount, 0, seatManager.FreeSeatCount);
+        int count = Mathf.Clamp(startSeatedCount, 0, _seatManager.FreeSeatCount);
 
         for (int i = 0; i < count; i++)
         {
-            var p = Instantiate(passengerPrefab);
-            p.Init(seatManager, frontExit, backExit, this);
+            var p = Instantiate(_passengerPrefab);
+            p.Init(_seatManager, _frontExit, _backExit, this);
 
             Register(p);
-            noiseManager.Register(p);
+            _noiseManager.Register(p);
 
-            if (!seatManager.TryClaimRandomSeat(p, out var seat))
+            if (!_seatManager.TryClaimRandomSeat(p, out var seat))
             {
                 Unregister(p);
-                noiseManager.Unregister(p);
+                _noiseManager.Unregister(p);
                 Destroy(p.gameObject);
                 return;
             }

@@ -6,18 +6,18 @@ using UnityEngine;
 public class NoiseManager : MonoBehaviour
 {
     [Header("Timing")]
-    [SerializeField] private float baseIntervalMin = 3f;
-    [SerializeField] private float baseIntervalMax = 7f;
+    [SerializeField] private float _baseIntervalMin = 3f;
+    [SerializeField] private float _baseIntervalMax = 7f;
 
     [Tooltip("Higher = more frequent noises. 1 = normal, 2 = twice as often, 0.5 = half as often.")]
-    [SerializeField] private float rateMultiplier = 1f;
+    [SerializeField] private float _rateMultiplier = 1f;
 
-    private readonly HashSet<Passenger> passengers = new();
+    private readonly HashSet<Passenger> _passengers = new();
 
-    public void Register(Passenger p) => passengers.Add(p);
-    public void Unregister(Passenger p) => passengers.Remove(p);
+    public void Register(Passenger p) => _passengers.Add(p);
+    public void Unregister(Passenger p) => _passengers.Remove(p);
 
-    public void SetRateMultiplier(float m) => rateMultiplier = Mathf.Max(0.01f, m);
+    public void SetRateMultiplier(float m) => _rateMultiplier = Mathf.Max(0.01f, m);
 
     void Start()
     {
@@ -28,8 +28,8 @@ public class NoiseManager : MonoBehaviour
     {
         while (true)
         {
-            float wait = Random.Range(baseIntervalMin, baseIntervalMax);
-            wait /= rateMultiplier; // speed up/slow down globally
+            float wait = Random.Range(_baseIntervalMin, _baseIntervalMax);
+            wait /= _rateMultiplier; // speed up/slow down globally
             yield return new WaitForSeconds(wait);
 
             TryTriggerNoise();
@@ -38,7 +38,7 @@ public class NoiseManager : MonoBehaviour
 
     private void TryTriggerNoise()
     {
-        var eligible = passengers.Where(p => p != null && p.IsEligibleForNoise).ToList();
+        var eligible = _passengers.Where(p => p != null && p.IsEligibleForNoise).ToList();
         if (eligible.Count == 0) return;
 
         var chosen = eligible[Random.Range(0, eligible.Count)];

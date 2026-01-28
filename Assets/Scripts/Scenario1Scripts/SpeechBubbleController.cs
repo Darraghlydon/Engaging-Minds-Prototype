@@ -4,20 +4,20 @@ using UnityEngine;
 public class SpeechBubbleController : MonoBehaviour
 {
 
-    private Transform cameraTransform;
+    private Transform _cameraTransform;
     void Awake()
     {
         var brain = FindFirstObjectByType<CinemachineBrain>();
         if (brain != null)
-            cameraTransform = brain.GetComponent<Camera>().transform;
+            _cameraTransform = brain.GetComponent<Camera>().transform;
     }
 
     void LateUpdate()
     {
-        if (cameraTransform == null) return;
+        if (_cameraTransform == null) return;
 
         // Face the camera's POSITION (not its rotation)
-        transform.LookAt(cameraTransform.position, Vector3.up);
+        transform.LookAt(_cameraTransform.position, Vector3.up);
     }
 
 }

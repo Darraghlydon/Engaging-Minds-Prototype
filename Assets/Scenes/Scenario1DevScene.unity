@@ -180,10 +180,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c6112c0de2d05459d1b3137a0866c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReactionMinigameController
-  panelRoot: {fileID: 426926544}
-  barRect: {fileID: 690818037}
-  zoneRect: {fileID: 1254539361}
-  arrowRect: {fileID: 956494275}
+  _panelRoot: {fileID: 426926544}
+  _barRect: {fileID: 690818037}
+  _zoneRect: {fileID: 1254539361}
+  _arrowRect: {fileID: 956494275}
 --- !u!4 &81586840
 Transform:
   m_ObjectHideFlags: 0
@@ -410,17 +410,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8f0d109a68a4b4396a53e824cb3e9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassengerSpawner
-  minPassengersToKeep: 4
-  noiseManager: {fileID: 820786731}
-  seatManager: {fileID: 1381763616}
-  passengerPrefab: {fileID: 1305173041578956677, guid: 189d4035029f19a46b76620d07e53b02, type: 3}
-  frontSpawn: {fileID: 331894568}
-  backSpawn: {fileID: 1723753137}
-  frontExit: {fileID: 331894568}
-  backExit: {fileID: 1723753137}
+  _minPassengersToKeep: 2
+  _noiseManager: {fileID: 820786731}
+  _seatManager: {fileID: 1381763616}
+  _passengerPrefab: {fileID: 1305173041578956677, guid: 189d4035029f19a46b76620d07e53b02, type: 3}
+  _frontSpawn: {fileID: 331894568}
+  _backSpawn: {fileID: 1723753137}
+  _frontExit: {fileID: 331894568}
+  _backExit: {fileID: 1723753137}
   startSeatedCount: 4
-  spawnIntervalMin: 10
-  spawnIntervalMax: 20
+  _spawnIntervalMin: 30
+  _spawnIntervalMax: 60
 --- !u!4 &228401110
 Transform:
   m_ObjectHideFlags: 0
@@ -1528,9 +1528,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b154522ff537e4880ca26a00ba7cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoiseManager
-  baseIntervalMin: 3
-  baseIntervalMax: 7
-  rateMultiplier: 1
+  _baseIntervalMin: 3
+  _baseIntervalMax: 7
+  _rateMultiplier: 1
 --- !u!4 &820786732
 Transform:
   m_ObjectHideFlags: 0
@@ -3437,8 +3437,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d3b351b6b9e31489ff6bcb62ac7064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControlFPS
-  playerSpeed: 2
-  lookSensitivity: 0.1
+  _playerSpeed: 2
+  _lookSensitivity: 0.2
   _myCameraTransform: {fileID: 1833665169}
 --- !u!195 &1887756257
 NavMeshAgent:
@@ -3475,11 +3475,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassengerInteractor
   interactRange: 1
-  passengerMask:
+  _passengerMask:
     serializedVersion: 2
     m_Bits: 64
-  minigame: {fileID: 81586839}
-  defaultProfile: {fileID: 11400000, guid: f022c9a81c461c24a8e9d0a4f4701eef, type: 2}
+  _minigame: {fileID: 81586839}
+  _defaultProfile: {fileID: 11400000, guid: f022c9a81c461c24a8e9d0a4f4701eef, type: 2}
 --- !u!1 &1914582283
 GameObject:
   m_ObjectHideFlags: 0
