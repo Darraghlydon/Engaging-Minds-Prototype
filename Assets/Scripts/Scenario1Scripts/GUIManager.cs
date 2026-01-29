@@ -40,7 +40,7 @@ public class GUIManager : MonoBehaviour
 
     public void Start()
     {
-        DeactivateScreens();
+        CloseOpenScreens();
         _currentState = UIState.Start;
         SwitchState(_currentState);
         InputManager.Instance.SwitchToUI();
@@ -132,13 +132,7 @@ public class GUIManager : MonoBehaviour
 
     public void DisplayPauseScreen(InputAction.CallbackContext context)
     {
-        _previousMode = InputManager.Instance.CurrentMode;
-        if (CheckForOpenScreens() == false)
-        {
-            //DeactivateScreens();
-            HideAllScreens();
-            SwitchState(UIState.Pause);
-        }
+        DisplayPauseScreen();
     }
 
     public void DisplayPauseScreen()
@@ -146,28 +140,33 @@ public class GUIManager : MonoBehaviour
         _previousMode = InputManager.Instance.CurrentMode;
         if (CheckForOpenScreens() == false)
         {
-            //DeactivateScreens();
-            HideAllScreens();
+            CloseOpenScreens();
             SwitchState(UIState.Pause);
         }
     }
 
-    private void HideAllScreens()
+    public void CloseOpenScreens()
     {
         _startScreen.SetActive(false);
         _pauseScreen.SetActive(false);
         _controlsScreen.SetActive(false);
+
+        if (_storedUIState != UIState.Default)
+        {
+            SwitchState(_storedUIState);
+            _storedUIState = UIState.Default;
+        }
     }
 
     public void DisplayControlMethodScreen()
     {
-        DeactivateScreens();
+        CloseOpenScreens();
         SwitchState(UIState.ControlMethodSelection);
     }
 
     public void DisplayCreditsScreen()
     {
-        DeactivateScreens();
+        CloseOpenScreens();
         SwitchState(UIState.Credits);
     }
 
@@ -183,19 +182,12 @@ public class GUIManager : MonoBehaviour
         }
     }
 
-    public void DeactivateScreens()
+    public void ResumeGame()
     {
         //DisableMouse();
+        CloseOpenScreens();
         Unpause();
-        _startScreen.SetActive(false);
-        _pauseScreen.SetActive(false);
-        _controlsScreen.SetActive(false);
-
-        if (_storedUIState != UIState.Default)
-        {
-            SwitchState(_storedUIState);
-            _storedUIState = UIState.Default;
-        }
+        
 
     }
 
