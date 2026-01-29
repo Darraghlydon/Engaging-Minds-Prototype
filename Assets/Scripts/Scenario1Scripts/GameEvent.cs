@@ -92,6 +92,6 @@ public static class Events
 
     // Subtitles
     public static readonly GameEvent<string, float> DisplaySubtitles = new();
-    public static readonly GameEvent SubtitlesSkip = new();
-    public static readonly GameEvent SubtitlesStop = new();
+    public static readonly GameEvent Pause = new();
+    public static readonly GameEvent Unpause = new();
 }

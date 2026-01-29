@@ -230,6 +230,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 624606529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &108556864 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5060807157886299432, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+  m_PrefabInstance: {fileID: 745384479}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &128796291
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,8 +432,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GUIManager
   _pauseScreen: {fileID: 1084446943}
   _startScreen: {fileID: 1727572644}
-  _controls: {fileID: 1718406298}
+  _controlsScreen: {fileID: 1718406298}
   _mainMenuSceneName: Scenario1DevScene
+  _defaultButtonStart: {fileID: 1481640007}
+  _defaultButtonPause: {fileID: 108556864}
+  _defaultButtonControls: {fileID: 509347412}
 --- !u!1 &228401108
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,6 +834,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 1747654802}
     m_Modifications:
     - target: {fileID: 453329681618779449, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0.9528302
+      objectReference: {fileID: 0}
+    - target: {fileID: 453329681618779449, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.28851897
+      objectReference: {fileID: 0}
+    - target: {fileID: 453329681618779449, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 453329681618779449, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 141602756}
@@ -835,14 +855,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781791720928708839, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 781791720928708839, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.5137255
       objectReference: {fileID: 0}
     - target: {fileID: 781791720928708839, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737670143539154088, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0.9528302
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737670143539154088, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.28851897
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737670143539154088, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1737670143539154088, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
@@ -866,6 +898,18 @@ PrefabInstance:
       value: Welcome
       objectReference: {fileID: 0}
     - target: {fileID: 3503462039956655402, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 0.9528302
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503462039956655402, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.28851897
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503462039956655402, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503462039956655402, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 141602756}
@@ -875,11 +919,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3688065611535822100, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3688065611535822100, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.5137255
       objectReference: {fileID: 0}
     - target: {fileID: 3688065611535822100, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.r
@@ -975,11 +1019,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6593349362197291001, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6593349362197291001, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.5125196
       objectReference: {fileID: 0}
     - target: {fileID: 6593349362197291001, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
       propertyPath: m_Color.r
@@ -1006,6 +1050,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+--- !u!1 &509347412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3361376440303526145, guid: 912589d3f2b4e09489a5d13d255a7d63, type: 3}
+  m_PrefabInstance: {fileID: 1278887097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &515185553
 GameObject:
   m_ObjectHideFlags: 0
@@ -3415,6 +3464,11 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!1 &1481640007 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5060807157886299432, guid: adf70b6e94b7b2345830a3196a8fc275, type: 3}
+  m_PrefabInstance: {fileID: 428404941}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1555331029
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ public class ReactionMinigameController : MonoBehaviour
     private float _direction = 1f;   // +1 up, -1 down
     private float _elapsed;
     private bool _running;
+    private bool _paused;
 
     void Awake()
     {
@@ -28,6 +29,27 @@ public class ReactionMinigameController : MonoBehaviour
         InputManager.Instance.Actions.UI.Interact.performed += OnInteractPerformed;
     }
 
+    private void OnEnable()
+    {
+        Events.Pause.Subscribe(OnPause);
+        Events.Pause.Subscribe(OnUnpaused);
+    }
+
+    private void OnDisable()
+    {
+        Events.Pause.Unsubscribe(OnPause);
+        Events.Pause.Unsubscribe(OnUnpaused);
+    }
+
+    void OnPause()
+    {
+        _paused = true;
+    }
+
+    void OnUnpaused()
+    {
+        _paused = false;
+    }
 
     void OnDestroy()
     {
@@ -40,7 +62,8 @@ public class ReactionMinigameController : MonoBehaviour
 
     public void Show(ReactionMinigameProfile profile, Action<bool> onComplete)
     {
-        InputManager.Instance.SwitchToUI();
+        InputManager.Instance.SwitchToReactionGame();
+        Time.timeScale = 0f;
         //Cursor.lockState = CursorLockMode.None;
         //Cursor.visible = true;
 
@@ -62,8 +85,8 @@ public class ReactionMinigameController : MonoBehaviour
     {
         if (!_running) return;
         _running = false;
-
-        InputManager.Instance.SwitchToPlayer();
+        Time.timeScale = 1f;
+        InputManager.Instance.SwitchToMainGame();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
 
@@ -78,7 +101,7 @@ public class ReactionMinigameController : MonoBehaviour
 
     void Update()
     {
-        if (!_running || _profile == null) return;
+        if (!_running || _profile == null||_paused) return;
 
         // Move arrow up/down
         float delta = _profile.speed * Time.unscaledDeltaTime; // unscaled for UI minigame
