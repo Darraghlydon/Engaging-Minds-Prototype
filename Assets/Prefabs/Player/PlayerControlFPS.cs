@@ -36,15 +36,11 @@ public class PlayerControlFPS : MonoBehaviour
         _passengerInteractor = GetComponent<PassengerInteractor>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         _myController = GetComponent<CharacterController>();
         _myTransform = transform;
-        //InputManager.Instance.SwitchToPlayer();
-        //Cursor.lockState = CursorLockMode.Locked;
         _lockedY = transform.position.y;
-        //_myCameraTransform = GetComponentInChildren<Camera>().transform;
     }
 
     void OnInteract(InputAction.CallbackContext context)
@@ -53,7 +49,6 @@ public class PlayerControlFPS : MonoBehaviour
         _passengerInteractor.TryInteract();
     }
 
-    // Update is called once per frame
     void Update()
     { 
         HandleMovement();

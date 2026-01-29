@@ -3074,6 +3074,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 4814791144202228473, guid: 912589d3f2b4e09489a5d13d255a7d63, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 141602756}
+    - target: {fileID: 4814791144202228473, guid: 912589d3f2b4e09489a5d13d255a7d63, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DeactivateScreens
+      objectReference: {fileID: 0}
     - target: {fileID: 6392095204404659362, guid: 912589d3f2b4e09489a5d13d255a7d63, type: 3}
       propertyPath: m_fontAsset
       value: 
