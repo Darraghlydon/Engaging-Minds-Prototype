@@ -26,19 +26,19 @@ public class ReactionMinigameController : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.Actions.UI.Interact.performed += OnInteractPerformed;
+        InputManager.Instance.Actions.ReactionGame.Interact.performed += OnInteractPerformed;
     }
 
     private void OnEnable()
     {
         Events.Pause.Subscribe(OnPause);
-        Events.Pause.Subscribe(OnUnpaused);
+        Events.Unpause.Subscribe(OnUnpaused);
     }
 
     private void OnDisable()
     {
         Events.Pause.Unsubscribe(OnPause);
-        Events.Pause.Unsubscribe(OnUnpaused);
+        Events.Unpause.Unsubscribe(OnUnpaused);
     }
 
     void OnPause()
@@ -55,7 +55,7 @@ public class ReactionMinigameController : MonoBehaviour
     {
         if(InputManager.Instance != null)
         {
-            InputManager.Instance.Actions.UI.Interact.performed -= OnInteractPerformed;
+            InputManager.Instance.Actions.ReactionGame.Interact.performed -= OnInteractPerformed;
         }
         
     }
@@ -87,8 +87,6 @@ public class ReactionMinigameController : MonoBehaviour
         _running = false;
         Time.timeScale = 1f;
         InputManager.Instance.SwitchToMainGame();
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
 
         if (_panelRoot != null) _panelRoot.SetActive(false);
 
@@ -123,7 +121,7 @@ public class ReactionMinigameController : MonoBehaviour
 
     private void OnInteractPerformed(InputAction.CallbackContext ctx)
     {
-        if (!_running || _profile == null) return;
+        if (!_running || _profile == null ||_paused) return;
 
         // success if arrow is within zone
         float half = _profile.zoneSize * 0.5f;

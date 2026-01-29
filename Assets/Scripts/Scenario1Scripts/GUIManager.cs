@@ -43,6 +43,9 @@ public class GUIManager : MonoBehaviour
         DeactivateScreens();
         _currentState = UIState.Start;
         SwitchState(_currentState);
+        InputManager.Instance.SwitchToUI();
+        _previousMode = GameInputMode.MainGame;
+        
         InputManager.Instance.Actions.MainGame.Menu.performed += DisplayPauseScreen;
         InputManager.Instance.Actions.ReactionGame.Menu.performed += DisplayPauseScreen;
     }
@@ -104,8 +107,9 @@ public class GUIManager : MonoBehaviour
     {
         Time.timeScale = 0;
         AudioListener.pause = true;
-        InputManager.Instance.SwitchToUI();
         _previousMode = InputManager.Instance.CurrentMode;
+        Debug.Log(_previousMode);
+        InputManager.Instance.SwitchToUI();
         Events.Pause.Publish();
     }
 
@@ -128,10 +132,10 @@ public class GUIManager : MonoBehaviour
 
     public void DisplayPauseScreen(InputAction.CallbackContext context)
     {
-        Debug.Log("Here!!");
         if (CheckForOpenScreens() == false)
         {
-            DeactivateScreens();
+            //DeactivateScreens();
+            HideAllScreens();
             SwitchState(UIState.Pause);
         }
     }
@@ -140,9 +144,17 @@ public class GUIManager : MonoBehaviour
     {
         if (CheckForOpenScreens() == false)
         {
-            DeactivateScreens();
+            //DeactivateScreens();
+            HideAllScreens();
             SwitchState(UIState.Pause);
         }
+    }
+
+    private void HideAllScreens()
+    {
+        _startScreen.SetActive(false);
+        _pauseScreen.SetActive(false);
+        _controlsScreen.SetActive(false);
     }
 
     public void DisplayControlMethodScreen()
