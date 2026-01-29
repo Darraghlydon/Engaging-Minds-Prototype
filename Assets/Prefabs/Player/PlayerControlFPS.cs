@@ -41,8 +41,8 @@ public class PlayerControlFPS : MonoBehaviour
     {
         _myController = GetComponent<CharacterController>();
         _myTransform = transform;
-        InputManager.Instance.SwitchToPlayer();
-        Cursor.lockState = CursorLockMode.Locked;
+        //InputManager.Instance.SwitchToPlayer();
+        //Cursor.lockState = CursorLockMode.Locked;
         _lockedY = transform.position.y;
         //_myCameraTransform = GetComponentInChildren<Camera>().transform;
     }
