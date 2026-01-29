@@ -107,7 +107,7 @@ public class GUIManager : MonoBehaviour
     {
         Time.timeScale = 0;
         AudioListener.pause = true;
-        _previousMode = InputManager.Instance.CurrentMode;
+        
         Debug.Log(_previousMode);
         InputManager.Instance.SwitchToUI();
         Events.Pause.Publish();
@@ -132,6 +132,7 @@ public class GUIManager : MonoBehaviour
 
     public void DisplayPauseScreen(InputAction.CallbackContext context)
     {
+        _previousMode = InputManager.Instance.CurrentMode;
         if (CheckForOpenScreens() == false)
         {
             //DeactivateScreens();
@@ -142,6 +143,7 @@ public class GUIManager : MonoBehaviour
 
     public void DisplayPauseScreen()
     {
+        _previousMode = InputManager.Instance.CurrentMode;
         if (CheckForOpenScreens() == false)
         {
             //DeactivateScreens();
