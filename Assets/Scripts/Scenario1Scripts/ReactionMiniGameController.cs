@@ -64,8 +64,6 @@ public class ReactionMinigameController : MonoBehaviour
     {
         InputManager.Instance.SwitchToReactionGame();
         Time.timeScale = 0f;
-        //Cursor.lockState = CursorLockMode.None;
-        //Cursor.visible = true;
 
         this._profile = profile;
         this.onComplete = onComplete;

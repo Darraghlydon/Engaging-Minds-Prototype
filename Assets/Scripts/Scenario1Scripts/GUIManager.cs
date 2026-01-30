@@ -1,11 +1,8 @@
 using TMPro;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
-using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public enum UIState
 {
