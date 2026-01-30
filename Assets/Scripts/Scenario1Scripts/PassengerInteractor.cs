@@ -5,7 +5,6 @@ public class PassengerInteractor : MonoBehaviour
     [SerializeField] private float interactRange = 2f;
     [SerializeField] private LayerMask _passengerMask;
     [SerializeField] private ReactionMinigameController _minigame;
-    [SerializeField] private ReactionMinigameProfile _defaultProfile;
 
     public void TryInteract()
     {
@@ -17,7 +16,7 @@ public class PassengerInteractor : MonoBehaviour
             {
                 p.Silence();
                 Debug.Log("Silence");
-                _minigame.Show(_defaultProfile, success =>
+                _minigame.Show(success =>
                 {
                     if (success)
                     {

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c32b2e687a8a8814f9077550e5a31d74, type: 3}
-  m_Name: New Reaction Minigame Profile
+  m_Name: Reset Minigame Profile
   m_EditorClassIdentifier: Assembly-CSharp::ReactionMinigameProfile
   zoneCenter: 0.5
-  zoneSize: 0.2
-  speed: 2
+  zoneSize: 0.5
+  speed: 1
   timeLimit: 0
