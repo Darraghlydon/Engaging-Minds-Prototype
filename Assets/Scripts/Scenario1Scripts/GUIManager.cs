@@ -10,7 +10,8 @@ public enum UIState
     Start,
     Pause,
     ControlMethodSelection,
-    Credits
+    Credits,
+    MaxStress
 }
 
 public class GUIManager : MonoBehaviour
@@ -22,6 +23,8 @@ public class GUIManager : MonoBehaviour
     [SerializeField] private GameObject _defaultButtonStart;
     [SerializeField] private GameObject _controlsScreen;
     [SerializeField] private GameObject _defaultButtonControls;
+    [SerializeField] private GameObject _maxStressScreen;
+    [SerializeField] private GameObject _defaultButtonMaxStress;
     [Header("Settings")]
     [SerializeField] private string _mainMenuSceneName;
 
@@ -54,7 +57,13 @@ public class GUIManager : MonoBehaviour
     void OnEnable()
     {
         SetupNavigationForWebGL();
-        
+        Events.MaxStressReached.Subscribe(OnMaxStressReached);
+    }
+
+    void OnDisable()
+    {
+        Events.MaxStressReached.Unsubscribe(OnMaxStressReached);
+
     }
 
     void OnDestroy()
@@ -66,8 +75,6 @@ public class GUIManager : MonoBehaviour
             InputManager.Instance.Actions.ReactionGame.Menu.performed -= DisplayPauseScreen;
         }
 
-        //Events.SubtitlesSkip.Unsubscribe(SubtitlesSkip);
-        //Events.SubtitlesStop.Unsubscribe(OnSubtitlesStopped); // FIXED
     }
 
     void SwitchState(UIState newState)
@@ -92,6 +99,12 @@ public class GUIManager : MonoBehaviour
                 Pause();
                 _startScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonStart);
+                break;
+            case UIState.MaxStress:
+                InputManager.Instance.SwitchToUI();
+                Pause();
+                _maxStressScreen.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
                 break;
 
 
@@ -150,6 +163,7 @@ public class GUIManager : MonoBehaviour
         _startScreen.SetActive(false);
         _pauseScreen.SetActive(false);
         _controlsScreen.SetActive(false);
+        _maxStressScreen.SetActive(false);
 
         if (_storedUIState != UIState.Default)
         {
@@ -194,6 +208,22 @@ public class GUIManager : MonoBehaviour
     public void LoadMainMenu()
     {
         SceneManager.LoadScene(_mainMenuSceneName);
+    }
+
+    private void OnMaxStressReached()
+    {
+        // If already showing a blocking screen, ignore.
+        if (_currentState == UIState.MaxStress) return;
+
+        OpenMaxStressScreen();
+    }
+
+    private void OpenMaxStressScreen()
+    {
+        CloseOpenScreens();
+        _currentState = UIState.MaxStress;
+        SwitchState(_currentState);
+        EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
     }
 
     private void SetupNavigationForWebGL()

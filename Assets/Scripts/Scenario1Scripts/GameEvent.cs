@@ -94,4 +94,5 @@ public static class Events
     public static readonly GameEvent Pause = new();
     public static readonly GameEvent Unpause = new();
     public static readonly GameEvent<bool> MiniGameSuccess = new();
+    public static readonly GameEvent MaxStressReached = new();
 }
