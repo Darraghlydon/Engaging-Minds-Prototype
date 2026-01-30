@@ -7,10 +7,13 @@ public class ReactionMinigameController : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject _panelRoot;     // ReactionMinigamePanel
     [SerializeField] private RectTransform _barRect;    // Bar rect
-    [SerializeField] private RectTransform _zoneRect;   // SuccessZone rect
+    [SerializeField] private RectTransform _successZoneRect;   // SuccessZone rect
     [SerializeField] private RectTransform _arrowRect; // Arrow rect
+    [Header("Settings")]
     [SerializeField] private ReactionMinigameProfile _defaultProfile;
     [SerializeField] private ReactionMinigameProfile _resetProfile;
+    [SerializeField] private float _maxSpeed=4;
+    [SerializeField] private float _minZone=1;
     [SerializeField] private float _speedPenalty;
     [SerializeField] private float _zonePenalty;
 
@@ -72,14 +75,10 @@ public class ReactionMinigameController : MonoBehaviour
         
     }
 
-    public void Show(Action<bool> onComplete)
+    public void Show()
     {
-
-
         InputManager.Instance.SwitchToReactionGame();
         Time.timeScale = 0f;
-
-        this.onComplete = onComplete;
 
         _arrowPosition = UnityEngine.Random.value;
         _direction = 1f;
@@ -87,7 +86,6 @@ public class ReactionMinigameController : MonoBehaviour
         _running = true;
 
         ApplyZoneUI();
-
         if (_panelRoot != null) _panelRoot.SetActive(true);
 
     }
@@ -98,13 +96,30 @@ public class ReactionMinigameController : MonoBehaviour
         _running = false;
         Time.timeScale = 1f;
         InputManager.Instance.SwitchToMainGame();
-
+        AdjustSuccessZone(success);
+        PostMiniGameSuccessEvent(success);
         if (_panelRoot != null) _panelRoot.SetActive(false);
 
-        var cb = onComplete;
-        onComplete = null;
+    }
 
-        cb?.Invoke(success);
+    private void AdjustSuccessZone(bool success)
+    {
+        if (success)
+        {
+        }
+        else
+        {
+            _zoneSize = Mathf.Max(_minZone, _zoneSize - _zonePenalty);
+            _speed = Mathf.Min(_maxSpeed, _speed + _speedPenalty);
+            Debug.Log("Zone Size: " + _zoneSize);
+            Debug.Log("Speed: " + _speed);
+        }
+    }
+
+    private void PostMiniGameSuccessEvent(bool success)
+    {
+        Events.MiniGameSuccess.Publish(success);
+
     }
 
     void Update()
@@ -150,11 +165,11 @@ public class ReactionMinigameController : MonoBehaviour
         float max = Mathf.Clamp01(_zoneCenter + half);
 
         // Fill width; occupy min..max vertically
-        _zoneRect.anchorMin = new Vector2(0f, min);
-        _zoneRect.anchorMax = new Vector2(1f, max);
+        _successZoneRect.anchorMin = new Vector2(0f, min);
+        _successZoneRect.anchorMax = new Vector2(1f, max);
 
-        _zoneRect.offsetMin = Vector2.zero;
-        _zoneRect.offsetMax = Vector2.zero;
+        _successZoneRect.offsetMin = Vector2.zero;
+        _successZoneRect.offsetMax = Vector2.zero;
     }
 
     private void ApplyArrowUI(float normalized)

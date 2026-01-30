@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 66727070}
   - component: {fileID: 66727069}
   m_Layer: 5
-  m_Name: GameScreen
+  m_Name: StressLevelPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,8 +258,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReactionMinigameController
   _panelRoot: {fileID: 426926544}
   _barRect: {fileID: 690818037}
-  _zoneRect: {fileID: 1254539361}
+  _successZoneRect: {fileID: 1254539361}
   _arrowRect: {fileID: 956494275}
+  _defaultProfile: {fileID: 11400000, guid: f022c9a81c461c24a8e9d0a4f4701eef, type: 2}
+  _resetProfile: {fileID: 11400000, guid: 6418937b7260db7418096c32792896e9, type: 2}
+  _maxSpeed: 4
+  _minZone: 0.1
+  _speedPenalty: 0.2
+  _zonePenalty: 0.05
 --- !u!4 &81586840
 Transform:
   m_ObjectHideFlags: 0
@@ -323,7 +329,7 @@ GameObject:
   - component: {fileID: 123057373}
   - component: {fileID: 123057372}
   m_Layer: 5
-  m_Name: Reactionzone
+  m_Name: BarRect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -583,12 +589,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GUIManager
   _pauseScreen: {fileID: 1084446943}
-  _startScreen: {fileID: 1727572644}
-  _controlsScreen: {fileID: 1718406298}
-  _mainMenuSceneName: Scenario1DevScene
-  _defaultButtonStart: {fileID: 1481640007}
   _defaultButtonPause: {fileID: 108556864}
+  _startScreen: {fileID: 1727572644}
+  _defaultButtonStart: {fileID: 1481640007}
+  _controlsScreen: {fileID: 1718406298}
   _defaultButtonControls: {fileID: 509347412}
+  _mainMenuSceneName: Scenario1DevScene
 --- !u!1 &228401108
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,9 +625,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassengerSpawner
   _minPassengersToKeep: 4
-  _noiseManager: {fileID: 820786731}
   _seatManager: {fileID: 1381763616}
   _passengerPrefab: {fileID: 1305173041578956677, guid: 189d4035029f19a46b76620d07e53b02, type: 3}
+  _noiseManager: {fileID: 820786731}
   _frontSpawn: {fileID: 331894568}
   _backSpawn: {fileID: 1723753137}
   _frontExit: {fileID: 331894568}
@@ -1251,7 +1257,7 @@ GameObject:
   - component: {fileID: 546374049}
   - component: {fileID: 546374048}
   m_Layer: 5
-  m_Name: SuccessZone
+  m_Name: FillRect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1530,6 +1536,7 @@ Transform:
   - {fileID: 81586840}
   - {fileID: 820786732}
   - {fileID: 141602755}
+  - {fileID: 2105904914}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &630743292
@@ -4471,7 +4478,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _minigame: {fileID: 81586839}
-  _defaultProfile: {fileID: 11400000, guid: f022c9a81c461c24a8e9d0a4f4701eef, type: 2}
 --- !u!1 &1914582283
 GameObject:
   m_ObjectHideFlags: 0
@@ -4503,6 +4509,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1740172515}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2105904913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2105904914}
+  - component: {fileID: 2105904915}
+  m_Layer: 0
+  m_Name: StressLevelController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2105904914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105904913}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 629278892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2105904915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105904913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43898eea8368d02448c166be45a34dd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StressLevelController
+  _barRect: {fileID: 123057371}
+  _fillRect: {fileID: 546374047}
+  _maxStress: 10
+  _smoothSpeed: 10
 --- !u!1 &2146348362
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,9 +4,26 @@ using UnityEngine;
 
 public class PassengerSpawner : MonoBehaviour
 {
-    [Header("Minimum passengers that must remain")]
+    [Header("Minimum Passengers")]
     [SerializeField] private int _minPassengersToKeep = 2;
+    
+    [Header("References")]
+    [SerializeField] private SeatManager _seatManager;
+    [SerializeField] private Passenger _passengerPrefab;
     [SerializeField] private NoiseManager _noiseManager;
+
+    [Header("Spawn/Exit Points")]
+    [SerializeField] private Transform _frontSpawn;
+    [SerializeField] private Transform _backSpawn;
+    [SerializeField] private Transform _frontExit;
+    [SerializeField] private Transform _backExit;
+
+    [Header("Starting Setup")]
+    [SerializeField] private int startSeatedCount = 2;
+
+    [Header("Spawning")]
+    [SerializeField] private float _spawnIntervalMin = 30f;
+    [SerializeField] private float _spawnIntervalMax = 60f; 
 
     private readonly HashSet<Passenger> activePassengers = new();
 
@@ -20,22 +37,6 @@ public class PassengerSpawner : MonoBehaviour
 
     public int ActiveCount => activePassengers.Count;
 
-    [Header("References")]
-    [SerializeField] private SeatManager _seatManager;
-    [SerializeField] private Passenger _passengerPrefab;
-
-    [Header("Spawn/Exit Points")]
-    [SerializeField] private Transform _frontSpawn;
-    [SerializeField] private Transform _backSpawn;
-    [SerializeField] private Transform _frontExit;
-    [SerializeField] private Transform _backExit;
-
-    [Header("Starting Setup")]
-    [SerializeField] private int startSeatedCount = 2;
-
-    [Header("Spawning")]
-    [SerializeField] private float _spawnIntervalMin = 30f;
-    [SerializeField] private float _spawnIntervalMax = 60f;
 
     void Start()
     {

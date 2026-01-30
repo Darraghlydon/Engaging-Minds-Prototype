@@ -15,17 +15,7 @@ public class PassengerInteractor : MonoBehaviour
             if (p != null && p.IsNoisy)
             {
                 p.Silence();
-                Debug.Log("Silence");
-                _minigame.Show(success =>
-                {
-                    if (success)
-                    {
-                    }
-                    else
-                    {
-                    }
-                });
-
+                _minigame.Show();
                 break;
             }
         }

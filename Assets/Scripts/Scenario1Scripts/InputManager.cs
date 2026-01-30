@@ -30,6 +30,7 @@ public class InputManager : MonoBehaviour
 
     public void SwitchToMainGame()
     {
+        DisableMouse();
         Actions.UI.Disable();
         Actions.ReactionGame.Disable();
         Actions.MainGame.Enable();
@@ -38,7 +39,7 @@ public class InputManager : MonoBehaviour
 
     public void SwitchToReactionGame()
     {
-
+        DisableMouse();
         Actions.UI.Disable();
         Actions.MainGame.Disable();
         Actions.ReactionGame.Enable();
@@ -47,9 +48,23 @@ public class InputManager : MonoBehaviour
 
     public void SwitchToUI()
     {
+        EnableMouse();
         Actions.MainGame.Disable();
         Actions.ReactionGame.Disable();
         Actions.UI.Enable();
         CurrentMode = GameInputMode.UI;
     }
+
+    void DisableMouse()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void EnableMouse()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
 }
