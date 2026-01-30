@@ -7,53 +7,85 @@ public class ReactionMinigameController : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject _panelRoot;     // ReactionMinigamePanel
     [SerializeField] private RectTransform _barRect;    // Bar rect
-    [SerializeField] private RectTransform _zoneRect;   // SuccessZone rect
-    [SerializeField] private RectTransform _arrowRect;  // Arrow rect
+    [SerializeField] private RectTransform _successZoneRect;   // SuccessZone rect
+    [SerializeField] private RectTransform _arrowRect; // Arrow rect
+    [Header("Settings")]
+    [SerializeField] private ReactionMinigameProfile _defaultProfile;
+    [SerializeField] private ReactionMinigameProfile _resetProfile;
+    [SerializeField] private float _maxSpeed=4;
+    [SerializeField] private float _minZone=1;
+    [SerializeField] private float _speedPenalty;
+    [SerializeField] private float _zonePenalty;
 
     private Action<bool> onComplete;
-    private ReactionMinigameProfile _profile;
+    
 
     private float _arrowPosition;          // arrow normalized position (0..1)
     private float _direction = 1f;   // +1 up, -1 down
     private float _elapsed;
     private bool _running;
+    private bool _paused;
+    private float _zoneCenter;
+    private float _zoneSize;
+    private float _speed;
+    private float _timeLimit;
 
     void Awake()
     {
         if (_panelRoot != null) _panelRoot.SetActive(false);
+        _zoneCenter = _defaultProfile.zoneCenter;
+        _zoneSize = _defaultProfile.zoneSize;
+        _speed = _defaultProfile.speed;
+        _timeLimit = _defaultProfile.timeLimit;
     }
 
     private void Start()
     {
-        InputManager.Instance.Actions.UI.Interact.performed += OnInteractPerformed;
+        InputManager.Instance.Actions.ReactionGame.Interact.performed += OnInteractPerformed;
     }
 
+    private void OnEnable()
+    {
+        Events.Pause.Subscribe(OnPause);
+        Events.Unpause.Subscribe(OnUnpaused);
+    }
+
+    private void OnDisable()
+    {
+        Events.Pause.Unsubscribe(OnPause);
+        Events.Unpause.Unsubscribe(OnUnpaused);
+    }
+
+    void OnPause()
+    {
+        _paused = true;
+    }
+
+    void OnUnpaused()
+    {
+        _paused = false;
+    }
 
     void OnDestroy()
     {
         if(InputManager.Instance != null)
         {
-            InputManager.Instance.Actions.UI.Interact.performed -= OnInteractPerformed;
+            InputManager.Instance.Actions.ReactionGame.Interact.performed -= OnInteractPerformed;
         }
         
     }
 
-    public void Show(ReactionMinigameProfile profile, Action<bool> onComplete)
+    public void Show()
     {
-        InputManager.Instance.SwitchToUI();
-        //Cursor.lockState = CursorLockMode.None;
-        //Cursor.visible = true;
-
-        this._profile = profile;
-        this.onComplete = onComplete;
+        InputManager.Instance.SwitchToReactionGame();
+        Time.timeScale = 0f;
 
         _arrowPosition = UnityEngine.Random.value;
         _direction = 1f;
         _elapsed = 0f;
         _running = true;
 
-        ApplyZoneUI(profile);
-
+        ApplyZoneUI();
         if (_panelRoot != null) _panelRoot.SetActive(true);
 
     }
@@ -62,26 +94,40 @@ public class ReactionMinigameController : MonoBehaviour
     {
         if (!_running) return;
         _running = false;
-
-        InputManager.Instance.SwitchToPlayer();
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
-
+        Time.timeScale = 1f;
+        InputManager.Instance.SwitchToMainGame();
+        AdjustSuccessZone(success);
+        PostMiniGameSuccessEvent(success);
         if (_panelRoot != null) _panelRoot.SetActive(false);
 
-        var cb = onComplete;
-        onComplete = null;
-        _profile = null;
+    }
 
-        cb?.Invoke(success);
+    private void AdjustSuccessZone(bool success)
+    {
+        if (success)
+        {
+        }
+        else
+        {
+            _zoneSize = Mathf.Max(_minZone, _zoneSize - _zonePenalty);
+            _speed = Mathf.Min(_maxSpeed, _speed + _speedPenalty);
+            Debug.Log("Zone Size: " + _zoneSize);
+            Debug.Log("Speed: " + _speed);
+        }
+    }
+
+    private void PostMiniGameSuccessEvent(bool success)
+    {
+        Events.MiniGameSuccess.Publish(success);
+
     }
 
     void Update()
     {
-        if (!_running || _profile == null) return;
+        if (!_running || _paused) return;
 
         // Move arrow up/down
-        float delta = _profile.speed * Time.unscaledDeltaTime; // unscaled for UI minigame
+        float delta = _speed * Time.unscaledDeltaTime; // unscaled for UI minigame
         _arrowPosition += _direction * delta;
 
         if (_arrowPosition >= 1f) { _arrowPosition = 1f; _direction = -1f; }
@@ -90,40 +136,40 @@ public class ReactionMinigameController : MonoBehaviour
         ApplyArrowUI(_arrowPosition);
 
         // Optional timeout
-        if (_profile.timeLimit > 0f)
+        if (_timeLimit > 0f)
         {
             _elapsed += Time.unscaledDeltaTime;
-            if (_elapsed >= _profile.timeLimit)
+            if (_elapsed >= _timeLimit)
                 End(false);
         }
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext ctx)
     {
-        if (!_running || _profile == null) return;
+        if (!_running || _paused) return;
 
         // success if arrow is within zone
-        float half = _profile.zoneSize * 0.5f;
-        float min = Mathf.Clamp01(_profile.zoneCenter - half);
-        float max = Mathf.Clamp01(_profile.zoneCenter + half);
+        float half = _zoneSize * 0.5f;
+        float min = Mathf.Clamp01(_zoneCenter - half);
+        float max = Mathf.Clamp01(_zoneCenter + half);
 
         bool success = (_arrowPosition >= min && _arrowPosition <= max);
         Debug.Log("Game Success: " + success);
         End(success);
     }
 
-    private void ApplyZoneUI(ReactionMinigameProfile p)
+    private void ApplyZoneUI()
     {
-        float half = p.zoneSize * 0.5f;
-        float min = Mathf.Clamp01(p.zoneCenter - half);
-        float max = Mathf.Clamp01(p.zoneCenter + half);
+        float half = _zoneSize * 0.5f;
+        float min = Mathf.Clamp01(_zoneCenter - half);
+        float max = Mathf.Clamp01(_zoneCenter + half);
 
         // Fill width; occupy min..max vertically
-        _zoneRect.anchorMin = new Vector2(0f, min);
-        _zoneRect.anchorMax = new Vector2(1f, max);
+        _successZoneRect.anchorMin = new Vector2(0f, min);
+        _successZoneRect.anchorMax = new Vector2(1f, max);
 
-        _zoneRect.offsetMin = Vector2.zero;
-        _zoneRect.offsetMax = Vector2.zero;
+        _successZoneRect.offsetMin = Vector2.zero;
+        _successZoneRect.offsetMax = Vector2.zero;
     }
 
     private void ApplyArrowUI(float normalized)

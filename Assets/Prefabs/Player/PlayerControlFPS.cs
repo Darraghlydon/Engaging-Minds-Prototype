@@ -31,20 +31,16 @@ public class PlayerControlFPS : MonoBehaviour
     private void Awake()
     {
         _playerActions = InputManager.Instance.Actions;
-        _playerActions.Player.Interact.performed += OnInteract;
+        _playerActions.MainGame.Interact.performed += OnInteract;
 
         _passengerInteractor = GetComponent<PassengerInteractor>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         _myController = GetComponent<CharacterController>();
         _myTransform = transform;
-        InputManager.Instance.SwitchToPlayer();
-        Cursor.lockState = CursorLockMode.Locked;
         _lockedY = transform.position.y;
-        //_myCameraTransform = GetComponentInChildren<Camera>().transform;
     }
 
     void OnInteract(InputAction.CallbackContext context)
@@ -53,7 +49,6 @@ public class PlayerControlFPS : MonoBehaviour
         _passengerInteractor.TryInteract();
     }
 
-    // Update is called once per frame
     void Update()
     { 
         HandleMovement();
@@ -70,7 +65,7 @@ public class PlayerControlFPS : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 moveVector = _playerActions.Player.Move.ReadValue<Vector2>();
+        Vector2 moveVector = _playerActions.MainGame.Move.ReadValue<Vector2>();
         _moveDirection = new Vector3(moveVector.x, 0, moveVector.y);
         _moveDirection = _myTransform.TransformDirection(_moveDirection);
         _myController.Move((_moveDirection * (_playerSpeed * Time.deltaTime)));
@@ -78,7 +73,7 @@ public class PlayerControlFPS : MonoBehaviour
 
     private void HandleLook()
     {
-        Vector2 lookVector = _playerActions.Player.Look.ReadValue<Vector2>();
+        Vector2 lookVector = _playerActions.MainGame.Look.ReadValue<Vector2>();
 
         
         _yRotation += lookVector.x * _lookSensitivity;
@@ -97,8 +92,8 @@ public class PlayerControlFPS : MonoBehaviour
     }
     public void SetGameplayControlsEnabled(bool enabled)
     {
-        if (enabled) _playerActions.Player.Enable();
-        else _playerActions.Player.Disable();
+        if (enabled) _playerActions.MainGame.Enable();
+        else _playerActions.MainGame.Disable();
     }  
     
 }
