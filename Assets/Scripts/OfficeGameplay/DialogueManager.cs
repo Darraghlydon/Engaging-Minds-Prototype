@@ -9,8 +9,10 @@ public class DialogueManager : MonoBehaviour
     public TextAsset inkFile;
     public TextMeshProUGUI textBox;
     private Story story;
+    private bool isDialoguePlaying;
 
     public Button[] choiceButtons;
+   // [SerializeField] private GameObject canvasToActivate; 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -28,7 +30,19 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue() 
     { 
-        story = new Story(inkFile.text); ContinueStory();
+        
+        
+            if (isDialoguePlaying) return;
+
+            isDialoguePlaying = true;
+            story = new Story(inkFile.text);
+
+            
+          //  textBox.gameObject.SetActive(true);
+
+            ContinueStory();
+        
+
     }
     private void ContinueStory()
     {
@@ -68,6 +82,10 @@ public class DialogueManager : MonoBehaviour
     }
     private void FinishDialogue()
     {
-        textBox.gameObject.SetActive(false);
+       textBox.gameObject.SetActive(false);
+      
+      //foreach (var button in choiceButtons)
+         // button.gameObject.SetActive(false);
+      isDialoguePlaying = false;
     }
 }

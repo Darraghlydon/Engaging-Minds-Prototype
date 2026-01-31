@@ -1,6 +1,6 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.InputSystem;
-interface IInteractable {public void Interact();
+//interface IInteractable {public void Interact();
 }
 public class Interactor : MonoBehaviour
 {
@@ -13,19 +13,17 @@ public class Interactor : MonoBehaviour
         
     }
   
-    void Update()
+   /* void Update()
     {
         if (Keyboard.current.eKey.wasPressedThisFrame)
         {
             Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
             if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange))
             {
-                if (hitInfo.collider.gameObject.TryGetComponent (out IInteractable interactObj)){
+                if (hitInfo.collider.gameObject.TryGetComponent (out OfficeInteractable interactObj)){
                     interactObj.Interact();
                 }
             }
-        }
-       
-    }
-}
+        }*/
+      
 
