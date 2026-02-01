@@ -1,22 +1,22 @@
-using NUnit.Framework;
 using UnityEngine;
 
 namespace OfficeGameplay
 {
+    // makes a game object interactable
     public class DialogueInteractable : MonoBehaviour, IInteractable
     {
+        //called by InteractionController when the player presses E while looking at this object. Starts the dialogue sequence via the DialogueManager.
         public string InteractMessage => interactMessage;
 
-        [SerializeField] private string interactMessage = "Press E to talk";
+        [SerializeField] string interactMessage; 
         [SerializeField] private DialogueManager dialogueManager;
-        [SerializeField] private GameObject canvasToActivate;
+      
 
         public void Interact()
         {
             if (dialogueManager != null)
             {
                 dialogueManager.StartDialogue();
-                Debug.Log("Dialogue started!");
             }
         }
     }

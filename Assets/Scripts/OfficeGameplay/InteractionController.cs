@@ -22,17 +22,18 @@ namespace OfficeGameplay
         {
             UpdateCurrentInteractable();
             UpdateCurrentInteractionText();
-
+            
+            // If the player presses E while looking at an interactable, calls its Interact method
             if (Keyboard.current != null &&
                 Keyboard.current.eKey.wasPressedThisFrame &&
                 currentTargetedInteractable != null)
             {
-                Debug.Log("INTERACT");
                 currentTargetedInteractable.Interact();
-            }
+            } 
         }
 
-        void UpdateCurrentInteractable()
+        //performs raycast from the center of camera, determines if player is looking at interactable object
+        void UpdateCurrentInteractable() 
         {
             
             Ray ray = playerCamera.ViewportPointToRay(new Vector2(0.5f, 0.5f));
@@ -48,13 +49,10 @@ namespace OfficeGameplay
             }
         }
 
+        // shows interaction prompt if player is looking at an interactable object
         void UpdateCurrentInteractionText()
         
         {
-           /* interactionText.text =
-                currentTargetedInteractable != null
-                    ? currentTargetedInteractable.InteractMessage
-                    : "";*/
            
            if (DialogueManagerInstance.dialogueCanvas.activeSelf)
            {

@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 // Controls player movement and rotation.
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5.0f;          // Set player movement speed.
-    public float rotationSpeed = 120.0f; // Set player rotation speed.
+    public float speed;        // Set player movement speed.
+    public float rotationSpeed; // Set player rotation speed.
 
     private Rigidbody rb; 
 
@@ -14,13 +14,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>(); 
     }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        
-    }
-
+    
     
     private void FixedUpdate()
     {

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Ink.Runtime;
 using UnityEngine.UI;
@@ -9,53 +10,74 @@ public class DialogueManager : MonoBehaviour
 {
     public TextAsset inkFile;
     public TextMeshProUGUI textBox;
-    private Story story;
-
     public GameObject dialogueCanvas;
+    private Story story;
     private bool dialogueOpen;
-    private bool lineDisplayed;
+  
+   void Awake()
+   {
+      
+       if (inkFile != null)
+       {
+           story = new Story(inkFile.text);
 
+       }
 
-    void Awake()
-    {
-        dialogueCanvas.SetActive(false);
-        textBox.gameObject.SetActive(false);
-        if (inkFile != null)
-        {
-            story = new Story(inkFile.text);
-        }
-    }
+       dialogueOpen = true;
+       dialogueCanvas.SetActive(false);
+       
+   }
+   
+   
+   
+  public void StartDialogue()
+  {
+      StartCoroutine(StartDialogueRoutine());
+  }
 
-    void Update()
-    {
-        if (dialogueCanvas.activeSelf && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            if (story != null && story.canContinue)
-            {
-                textBox.text = story.Continue();
-            }
-            else
-            {
-                FinishDialogue();
-            }
-        }
-    }
+  IEnumerator StartDialogueRoutine()
+  {
+      dialogueCanvas.SetActive(true);
+      textBox.gameObject.SetActive(true);
 
-    public void StartDialogue()
-         {
+      yield return null; // wait one frame
 
+      if (story != null && story.canContinue)
+      
+          textBox.text = story.Continue();
+          textBox.ForceMeshUpdate();
+      
+  }
 
-             dialogueCanvas.SetActive(true);
-             textBox.gameObject.SetActive(true);
-             if (story != null && story.canContinue)
-                 textBox.text = story.Continue();
+  // continue to read dialogue
+  void Update()
+  {
+      if (!dialogueCanvas.activeSelf)
+          return;
+      
 
+      if (Keyboard.current.spaceKey.wasPressedThisFrame)
+      {
+          if (story != null && story.canContinue)
+          {
+              textBox.text = story.Continue();
+              textBox.ForceMeshUpdate();
+          }
+          else
+          {
+              FinishDialogue();
+          }
+      }
+  }
 
-         }
-
-       void FinishDialogue()
+   
+// hide dialogue canvas when text finishes
+      void FinishDialogue() 
         {
             dialogueCanvas.SetActive(false);
             textBox.gameObject.SetActive(false);
+          
         }
+     
+    
     }
