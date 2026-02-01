@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129f83943c0154745b335f66e40a09ff, type: 3}
+  m_Name: ValueIconRegistry
+  m_EditorClassIdentifier: Assembly-CSharp::IconRegistry
+  entries:
+  - key: icon_value_safety
+    sprite: {fileID: 21300000, guid: 3e8be31606c0ebc4eaef79c80f7db6a0, type: 3}
+  - key: icon_value_teamwork
+    sprite: {fileID: 21300000, guid: bf2f966de880624478c543c33cd7228f, type: 3}
+  - key: icon_value_care
+    sprite: {fileID: 21300000, guid: c293a07c31ac87c4d8e81fd288469a54, type: 3}
+  - key: icon_value_learning
+    sprite: {fileID: 21300000, guid: 6f9cfd023b79bb24c8a05dccb5412132, type: 3}
+  - key: icon_value_fairness
+    sprite: {fileID: 21300000, guid: 2c4f36dc8dc721f428c7d4830c6a8d98, type: 3}
+  - key: icon_value_courage
+    sprite: {fileID: 21300000, guid: d05fb0bc8d1dfac41b8ec0ddf0c6e0d9, type: 3}
+  - key: icon_value_anti_safety
+    sprite: {fileID: 21300000, guid: 3b5b17cc1e685c041a0fd8f35ec42b92, type: 3}
+  - key: icon_value_anti_teamwork
+    sprite: {fileID: 21300000, guid: 3ff87f1e2ada2c84bb4ec9dc01ac5e6d, type: 3}
+  - key: icon_value_anti_care
+    sprite: {fileID: 21300000, guid: 47389b10248e1fc4a8e96251ab84c067, type: 3}
+  - key: icon_value_anti_learning
+    sprite: {fileID: 21300000, guid: 3c625b3bb17a2e444b8e015de00c34b6, type: 3}
+  - key: icon_value_anti_fairness
+    sprite: {fileID: 21300000, guid: 047d70546c2cb7f43b6a7eab07ef7d13, type: 3}
+  - key: icon_value_anti_courage
+    sprite: {fileID: 21300000, guid: c26a02d31a371c844bc5ab1c5338e96f, type: 3}
