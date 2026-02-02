@@ -93,6 +93,7 @@ public static class Events
     // Subtitles
     public static readonly GameEvent Pause = new();
     public static readonly GameEvent Unpause = new();
-    public static readonly GameEvent<bool> MiniGameSuccess = new();
+    public static readonly GameEvent IncreaseStress = new();
     public static readonly GameEvent MaxStressReached = new();
+    public static readonly GameEvent ReduceStress = new();
 }

@@ -119,7 +119,7 @@ public class GUIManager : MonoBehaviour
     void Pause()
     {
         Time.timeScale = 0;
-        AudioListener.pause = true;
+        //AudioListener.pause = true;
         
         Debug.Log(_previousMode);
         InputManager.Instance.SwitchToUI();
@@ -129,7 +129,7 @@ public class GUIManager : MonoBehaviour
     void Unpause()
     {
         Time.timeScale = 1;
-        AudioListener.pause = false;
+        //AudioListener.pause = false;
         switch (_previousMode)
         {
             case GameInputMode.MainGame:
