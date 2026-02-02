@@ -114,8 +114,6 @@ public class ReactionMinigameController : MonoBehaviour
         {
             _zoneSize = Mathf.Max(_minZone, _zoneSize - _zonePenalty);
             _speed = Mathf.Min(_maxSpeed, _speed + _speedPenalty);
-            Debug.Log("Zone Size: " + _zoneSize);
-            Debug.Log("Speed: " + _speed);
         }
     }
 
