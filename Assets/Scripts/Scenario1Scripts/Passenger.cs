@@ -35,8 +35,6 @@ public class Passenger : MonoBehaviour
         speechBubble.SetActive(false);
     }
 
-
-
     public void Init(SeatManager manager, Transform frontExit, Transform backExit, PassengerSpawner spawner)
     {
         _seatManager = manager;
