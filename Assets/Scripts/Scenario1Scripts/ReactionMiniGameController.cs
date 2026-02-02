@@ -97,7 +97,10 @@ public class ReactionMinigameController : MonoBehaviour
         Time.timeScale = 1f;
         InputManager.Instance.SwitchToMainGame();
         AdjustSuccessZone(success);
-        PostMiniGameSuccessEvent(success);
+        if (!success)
+        {
+            Events.IncreaseStress.Publish();
+        }
         if (_panelRoot != null) _panelRoot.SetActive(false);
 
     }
@@ -114,12 +117,6 @@ public class ReactionMinigameController : MonoBehaviour
             Debug.Log("Zone Size: " + _zoneSize);
             Debug.Log("Speed: " + _speed);
         }
-    }
-
-    private void PostMiniGameSuccessEvent(bool success)
-    {
-        Events.MiniGameSuccess.Publish(success);
-
     }
 
     void Update()

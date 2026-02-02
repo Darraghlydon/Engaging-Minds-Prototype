@@ -30,20 +30,17 @@ public class StressLevelController : MonoBehaviour
 
     private void OnEnable()
     {
-        Events.MiniGameSuccess.Subscribe(HandleMiniGameSuccessEvent);
+        Events.IncreaseStress.Subscribe(IncreaseStress);
     }
 
     private void OnDisable()
     {
-        Events.MiniGameSuccess.Unsubscribe(HandleMiniGameSuccessEvent);
+        Events.IncreaseStress.Unsubscribe(IncreaseStress);
     }
 
-    void HandleMiniGameSuccessEvent(bool success)
+    void IncreaseStress()
     {
-        if (!success)
-        {
-            AddStress(1);
-        }
+        AddStress(1);
     }
 
     public void AddStress(int amount = 1)

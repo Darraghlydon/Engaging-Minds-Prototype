@@ -11,6 +11,8 @@ public class NoiseManager : MonoBehaviour
 
     [Tooltip("Higher = more frequent noises. 1 = normal, 2 = twice as often, 0.5 = half as often.")]
     [SerializeField] private float _rateMultiplier = 1f;
+    [SerializeField] private float _rateMultiplierIncrement = 0.2f;
+    private float _rateMultiplierDefault;
 
     private readonly HashSet<Passenger> _passengers = new();
 
@@ -21,6 +23,8 @@ public class NoiseManager : MonoBehaviour
 
     void Start()
     {
+        _rateMultiplierDefault = _rateMultiplier;
+
         StartCoroutine(NoiseLoop());
     }
 
@@ -34,6 +38,29 @@ public class NoiseManager : MonoBehaviour
 
             TryTriggerNoise();
         }
+    }
+
+    private void OnEnable()
+    {
+        Events.IncreaseStress.Subscribe(IncreaseRateMultiplier);
+        Events.ReduceStress.Subscribe(ResetRateMultiplier);
+    }
+
+    private void OnDisable()
+    {
+        Events.IncreaseStress.Unsubscribe(IncreaseRateMultiplier);
+        Events.ReduceStress.Unsubscribe(ResetRateMultiplier);
+    }
+
+    void IncreaseRateMultiplier()
+    {
+        _rateMultiplier = _rateMultiplier + _rateMultiplierIncrement;
+        SetRateMultiplier(_rateMultiplier);
+    }
+
+    void ResetRateMultiplier()
+    {
+        _rateMultiplier=_rateMultiplierDefault; 
     }
 
     private void TryTriggerNoise()
