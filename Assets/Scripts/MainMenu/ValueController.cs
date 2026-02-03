@@ -83,7 +83,7 @@ public class ValuesController : MonoBehaviour
                 Destroy(gridParent.GetChild(i).gameObject);
         }
 
-        // _selectedIds.Clear();
+        _selectedIds.Clear();
     }
 
     private void OnCardClicked(ValueDefinition def)

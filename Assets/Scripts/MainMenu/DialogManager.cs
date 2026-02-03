@@ -10,25 +10,27 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private TextAsset dialogAsset = null;
     [SerializeField] private TextAsset completedInkDialogAsset = null;
 
-    private bool _transitioningToMinigame = false;
-
     public event Action<OfficeNPC> OnDialogStart;
 
     [Serializable]
-    private class NpcState
+    private sealed class NpcState
     {
         public bool completed;
         public string assignedMessage;
-
         [NonSerialized] public OfficeNPC live;
     }
 
-    private readonly Dictionary<string, NpcState> _npcs =
+    private readonly Dictionary<string, NpcState> _statesById =
         new(StringComparer.OrdinalIgnoreCase);
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -45,121 +47,140 @@ public class DialogManager : MonoBehaviour
 
     private void ResetSession()
     {
-        _npcs.Clear();
-        _transitioningToMinigame = false;
+        ResetRun();
     }
 
-    internal void BindController(DialogController dialogController)
+    public void ResetRun()
     {
-        dialogController.OnMinigameRequested += HandleMiniGame1Request;
-        dialogController.OnEndStory += EndDialogWithNPC;
-    }
+        foreach (var kvp in _statesById)
+        {
+            var state = kvp.Value;
+            state.completed = false;
 
-    internal void UnbindController(DialogController dialogController)
-    {
-        dialogController.OnMinigameRequested -= HandleMiniGame1Request;
-        dialogController.OnEndStory -= EndDialogWithNPC;
+            if (state.live != null)
+            {
+                state.live.TextAsset = dialogAsset;
+                state.live.SetAssignedValueMessage(state.assignedMessage ?? string.Empty);
+            }
+        }
+
+        Debug.Log("Resetting NPCs dialogues");
     }
 
     public void RegisterNPC(OfficeNPC npc)
     {
-        if (npc == null || string.IsNullOrWhiteSpace(npc.NpcId)) return;
+        if (npc == null) return;
+        if (string.IsNullOrWhiteSpace(npc.NpcId)) return;
 
-        var state = GetOrCreateNpcState(npc.NpcId);
+        var id = npc.NpcId.Trim();
+        var state = GetOrCreate(id);
+
         state.live = npc;
 
         npc.TextAsset = state.completed ? completedInkDialogAsset : dialogAsset;
-
         npc.SetAssignedValueMessage(state.assignedMessage ?? string.Empty);
     }
 
     public void UnregisterNPC(OfficeNPC npc)
     {
-        if (npc == null || string.IsNullOrWhiteSpace(npc.NpcId)) return;
+        if (npc == null) return;
+        if (string.IsNullOrWhiteSpace(npc.NpcId)) return;
 
-        if (_npcs.TryGetValue(npc.NpcId, out var state) && state.live == npc)
+        var id = npc.NpcId.Trim();
+        if (_statesById.TryGetValue(id, out var state) && state.live == npc)
             state.live = null;
     }
 
-    private NpcState GetOrCreateNpcState(string npcId)
+    private NpcState GetOrCreate(string npcId)
     {
-        if (!_npcs.TryGetValue(npcId, out var state))
+        if (!_statesById.TryGetValue(npcId, out var state))
         {
             state = new NpcState();
-            _npcs[npcId] = state;
+            _statesById[npcId] = state;
         }
         return state;
     }
 
     public void StartDialogWithNPC(OfficeNPC npc)
     {
-        if (GameManager.Instance.CurrentGameState != GameState.Office) return;
+        var gm = GameManager.Instance;
+        if (gm == null) return;
+
         if (npc == null || string.IsNullOrWhiteSpace(npc.NpcId)) return;
 
-        if (_npcs.TryGetValue(npc.NpcId, out var state))
-            npc.SetAssignedValueMessage(state.assignedMessage ?? string.Empty);
+        if (!gm.TryEnterDialogue())
+            return;
 
-        _transitioningToMinigame = false;
+        var id = npc.NpcId.Trim();
+        var state = GetOrCreate(id);
 
-        GameManager.Instance.SetGameState(GameState.Dialogue);
+        npc.SetAssignedValueMessage(state.assignedMessage ?? string.Empty);
+        npc.TextAsset = state.completed ? completedInkDialogAsset : dialogAsset;
+
         OnDialogStart?.Invoke(npc);
     }
 
-    public void EndDialogWithNPC()
+    public void RequestMinigame1(OfficeNPC npc)
     {
-        if (_transitioningToMinigame) return;
-        GameManager.Instance.SetGameState(GameState.Office);
-    }
+        var gm = GameManager.Instance;
+        if (gm == null) return;
 
-    private void HandleMiniGame1Request(OfficeNPC npc)
-    {
         if (npc == null || string.IsNullOrWhiteSpace(npc.NpcId)) return;
 
-        _transitioningToMinigame = true;
+        var id = npc.NpcId.Trim();
+        MarkCompleted(id);
 
-        var state = GetOrCreateNpcState(npc.NpcId);
+        gm.ExitDialogue();
+
+        gm.SetLevelState(LevelState.Minigame1);
+    }
+
+    public void MarkCompleted(string npcId)
+    {
+        if (string.IsNullOrWhiteSpace(npcId)) return;
+
+        var id = npcId.Trim();
+        var state = GetOrCreate(id);
+        if (state.completed) return;
+
         state.completed = true;
 
-        GameManager.Instance.SetGameState(GameState.Minigame);
+        if (state.live != null)
+            state.live.TextAsset = completedInkDialogAsset;
     }
 
-    public void OnMinigameEnded()
+    public void TryTriggerGameOverIfInOffice()
     {
-        PollCompletion();
-        if (GameManager.Instance.CurrentGameState != GameState.GameOver)
-            GameManager.Instance.SetGameState(GameState.Office);
-    }
+        var gm = GameManager.Instance;
+        if (gm == null) return;
 
-    private void PollCompletion()
-    {
-        if (_npcs.Count == 0) return;
+        if (gm.CurrentLevelState != LevelState.Office)
+            return;
 
-        int completedCount = 0;
-        foreach (var kvp in _npcs)
-            if (kvp.Value.completed) completedCount++;
+        if (_statesById.Count == 0) return;
 
-        if (completedCount >= _npcs.Count)
-            GameManager.Instance.SetGameState(GameState.GameOver);
+        foreach (var kvp in _statesById)
+        {
+            if (!kvp.Value.completed)
+                return;
+        }
+
+        gm.SetMenuState(MenuScreen.GameOverScreen);
     }
 
     public void SetNPCDialogues()
     {
-        var confirmed = CharacterManager.Instance.selectedValues;
+        var confirmed = CharacterManager.Instance?.characterData?.SelectedValues;
         if (confirmed == null || confirmed.Count == 0)
         {
             Debug.LogWarning("DialogManager: No selected values to assign.");
             return;
         }
 
-        var messages = new List<string>(confirmed.Count);
-        for (int i = 0; i < confirmed.Count; i++)
-        {
-            var def = confirmed[i];
-            if (def == null) continue;
-
-            if (!string.IsNullOrWhiteSpace(def.DialogMessage))
-                messages.Add(def.DialogMessage);
-        }
+        var messages = confirmed
+            .Where(v => v != null && !string.IsNullOrWhiteSpace(v.DialogMessage))
+            .Select(v => v.DialogMessage)
+            .ToList();
 
         if (messages.Count == 0)
         {
@@ -167,14 +188,22 @@ public class DialogManager : MonoBehaviour
             return;
         }
 
-        var npcIds = _npcs.Keys.OrderBy(id => id, StringComparer.OrdinalIgnoreCase).ToList();
+        if (_statesById.Count == 0)
+        {
+            Debug.LogWarning("DialogManager: No NPCs registered yet.");
+            return;
+        }
+
+        var npcIds = _statesById.Keys
+            .OrderBy(id => id, StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
         for (int i = 0; i < npcIds.Count; i++)
         {
-            string npcId = npcIds[i];
-            string msg = messages[i % messages.Count];
+            var npcId = npcIds[i];
+            var msg = messages[i % messages.Count];
 
-            var state = GetOrCreateNpcState(npcId);
+            var state = GetOrCreate(npcId);
             state.assignedMessage = msg;
 
             if (state.live != null)

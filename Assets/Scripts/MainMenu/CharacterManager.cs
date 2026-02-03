@@ -11,18 +11,21 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] private TextAsset valuesJson;
     [SerializeField] private IconRegistry iconRegistry;
 
-    private List<ValueDefinition> valueDefinitions = new();
-    public List<ValueDefinition> selectedValues;
+    private readonly List<ValueDefinition> valueDefinitions = new();
+
+    private List<ValueDefinition> selectedValues = new();
 
     public IReadOnlyList<ValueDefinition> ValueDefinitions => valueDefinitions;
-
     public IReadOnlyList<Sprite> PortraitOptions => options;
+
+    public IReadOnlyList<ValueDefinition> SelectedValues => characterData?.SelectedValues ?? selectedValues;
 
     public static CharacterManager Instance;
 
-    public CharacterData characterData { get; set; }
+    public CharacterData characterData { get; private set; }
 
-    public static event Action<CharacterData> CharacterDataChanged;
+    private GameManager GM => GameManager.Instance;
+
     private void Awake()
     {
         if (Instance == null)
@@ -42,7 +45,7 @@ public class CharacterManager : MonoBehaviour
 
         characterData = new CharacterData
         {
-            SelectedValues = selectedValues,
+            SelectedValues = new List<ValueDefinition>(selectedValues),
             SelectedPortrait = null
         };
     }
@@ -51,34 +54,56 @@ public class CharacterManager : MonoBehaviour
     {
         GameManager.ResetGameSession += ResetSession;
 
+        // Optional: lets us react when the player exits Values and enters play.
+        if (GM != null)
+            GM.MenuStateChanged += OnMenuStateChanged;
     }
 
     private void OnDisable()
     {
         GameManager.ResetGameSession -= ResetSession;
+
+        if (GM != null)
+            GM.MenuStateChanged -= OnMenuStateChanged;
     }
 
     private void ResetSession()
     {
         selectedValues = new List<ValueDefinition>();
+
         characterData = new CharacterData
         {
-            SelectedValues = selectedValues,
+            SelectedValues = new List<ValueDefinition>(),
             SelectedPortrait = null
         };
+
+        Debug.Log("Resetting Character Manager");
     }
-    
-    public void SetSelectedValues(List<ValueDefinition> obj)
+
+    private void OnMenuStateChanged(MenuScreen screen)
     {
-        selectedValues = obj;
-        CharacterDataChanged?.Invoke(characterData);
+        if (screen != MenuScreen.None) return;
+
+        if (GM != null && GM.CurrentLevelState == LevelState.Office)
+        {
+            if (characterData == null || characterData.SelectedValues == null || characterData.SelectedValues.Count == 0)
+                Debug.LogWarning("CharacterManager: Gameplay started but no values selected.");
+        }
+    }
+
+    public void SetSelectedValues(List<ValueDefinition> values)
+    {
+        selectedValues = values != null ? new List<ValueDefinition>(values) : new List<ValueDefinition>();
+
+        if (characterData == null) characterData = new CharacterData();
+
+        characterData.SelectedValues = new List<ValueDefinition>(selectedValues);
     }
 
     public void SetSelectedPortrait(Sprite portrait)
     {
         if (characterData == null) characterData = new CharacterData();
         characterData.SelectedPortrait = portrait;
-        CharacterDataChanged?.Invoke(characterData);
     }
 
     public void LoadValuesFromJson(TextAsset jsonAsset)
@@ -181,6 +206,7 @@ public class CharacterData
     public List<ValueDefinition> SelectedValues { get; set; }
     public Sprite SelectedPortrait { get; set; }
 }
+
 
 #region JSON DTOs
 

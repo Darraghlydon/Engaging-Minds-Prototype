@@ -12,18 +12,21 @@ public class OfficeNPC : MonoBehaviour, IInteractable
 
     public Sprite npcImage;
 
-    void Start()
+    private void OnEnable()
     {
         if (DialogManager.Instance) DialogManager.Instance.RegisterNPC(this);
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         if (DialogManager.Instance) DialogManager.Instance.UnregisterNPC(this);
     }
 
     public void Interact(LookInteractor interactor)
     {
+        if (GameManager.Instance != null && GameManager.Instance.PlayerInputBlocked)
+            return;
+
         DialogManager.Instance.StartDialogWithNPC(this);
     }
 

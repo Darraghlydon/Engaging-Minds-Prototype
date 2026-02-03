@@ -30,7 +30,7 @@ public class CharacterSelectionController : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
         if (!targetImage) targetImage = GetComponent<Image>();
 
@@ -80,6 +80,22 @@ public class CharacterSelectionController : MonoBehaviour
 
         SetIndex(initialIndex);
         UpdateSelectionVisuals(_selectedButtonIndex);
+    }
+
+    private void OnDisable()
+    {
+        ClearUI();
+    }
+
+
+    private void ClearUI()
+    {
+        _buttons.Clear();
+
+        for (int i = characterGrid.childCount - 1; i >= 0; i--)
+            Destroy(characterGrid.GetChild(i).gameObject);
+
+        _selectedButtonIndex = startIndex;
     }
 
     private void OnButtonClicked(int index)

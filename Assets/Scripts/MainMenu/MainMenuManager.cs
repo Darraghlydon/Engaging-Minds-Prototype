@@ -56,6 +56,9 @@ public class MainMenuManager : MonoBehaviour
                 // back button
                 case MainMenuButton.Back: buttonInfo.Button.onClick.AddListener(OnClickBack); break;
 
+                // retry button
+                case MainMenuButton.Retry: buttonInfo.Button.onClick.AddListener(OnClickReset); break;
+
                 default:
                     Debug.LogWarning($"Unhandled button type: {buttonInfo.ButtonType}");
                     break;
@@ -106,6 +109,7 @@ public class MainMenuManager : MonoBehaviour
 
         GameManager.Instance.StartNewGameFlow();
     }
+
     private void OnSubmitCharacterClicked()
     {
         if (!TryGetPanel(MenuScreen.Character, out var panel)) return;
@@ -120,6 +124,7 @@ public class MainMenuManager : MonoBehaviour
         characterPanel.SubmitCharacterSelection();
         GameManager.Instance.SubmitCharacter();
     }
+
     private void OnSubmitValuesClicked()
     {
         if (!TryGetPanel(MenuScreen.Values, out var panel)) return;
@@ -137,6 +142,7 @@ public class MainMenuManager : MonoBehaviour
     private void OnClickBack() => GameManager.Instance.ReturnToPreviousMenu();
     private void OnClickQuitSession() => GameManager.Instance.QuitToMainMenu();
     private void OnClickQuit() => GameManager.Instance.QuitGame();
+    private void OnClickReset() => GameManager.Instance.ResetSession();
 }
 
 [Serializable]
@@ -163,6 +169,7 @@ public enum MainMenuButton
     QuitSession,
     SubmitCharacter,
     SubmitValues,
+    Retry,
     Back
 }
 

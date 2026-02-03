@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class DialogController : MonoBehaviour
 {
     public static event Action<Story> OnCreateStory;
-    public event Action<OfficeNPC> OnMinigameRequested;
-    public event Action OnEndStory;
 
     public CanvasGroup canvasgroup;
 
@@ -35,18 +33,15 @@ public class DialogController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (DialogManager.Instance != null)
-            DialogManager.Instance.BindController(this);
-
         DialogManager.Instance.OnDialogStart += Init;
+        GameManager.Instance.DialogueChanged += ToggleDialogCanvas;
     }
 
     private void OnDisable()
     {
-        if (DialogManager.Instance != null)
-            DialogManager.Instance.UnbindController(this);
-
         DialogManager.Instance.OnDialogStart -= Init;
+        GameManager.Instance.DialogueChanged -= ToggleDialogCanvas;
+
     }
 
     public void Init(OfficeNPC npc)
@@ -126,8 +121,7 @@ public class DialogController : MonoBehaviour
         // If we've read all the content and there's no choices, the story is finished!
         else
         {
-            ToggleDialogCanvas(false);
-            OnEndStory?.Invoke();
+            GameManager.Instance?.ExitDialogue();
         }
     }
 
@@ -137,11 +131,11 @@ public class DialogController : MonoBehaviour
 
         if (playMiniGame)
         {
-            OnMinigameRequested?.Invoke(currentNPC);
+            DialogManager.Instance.RequestMinigame1(currentNPC);
         }
     }
 
-    private void ToggleDialogCanvas(bool toggle)
+    public void ToggleDialogCanvas(bool toggle)
     {
         canvasgroup.alpha = toggle ? 1 : 0;
         canvasgroup.blocksRaycasts = toggle;
@@ -191,4 +185,8 @@ public class DialogController : MonoBehaviour
         }
     }
 
+    internal void OnGameStateChanged(MenuScreen screen)
+    {
+        canvasgroup.interactable = screen != MenuScreen.Pause;
+    }
 }
