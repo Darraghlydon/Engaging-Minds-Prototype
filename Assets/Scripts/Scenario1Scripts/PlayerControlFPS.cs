@@ -31,9 +31,19 @@ public class PlayerControlFPS : MonoBehaviour
     private void Awake()
     {
         _playerActions = InputManager.Instance.Actions;
-        _playerActions.MainGame.Interact.performed += OnInteract;
+        //_playerActions.MainGame.Interact.performed += OnInteract;
 
         _passengerInteractor = GetComponent<PassengerInteractor>();
+    }
+
+    private void OnEnable()
+    {
+        _playerActions.MainGame.Interact.performed += OnInteract;
+    }
+
+    private void OnDisable()
+    {
+        _playerActions.MainGame.Interact.performed -= OnInteract;
     }
 
     void Start()
