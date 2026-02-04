@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public enum UIState
 {
@@ -240,8 +241,7 @@ public class GUIManager : MonoBehaviour
         SwitchState(_currentState);
     }
 
-
-    private void OnMinStressReached()
+       private void OnMinStressReached()
     {
         if (InputManager.Instance.CurrentMode != GameInputMode.BreathingGame) return;
         CloseAllScreens();

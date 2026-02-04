@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class ReactionMinigameController : MonoBehaviour
 {
@@ -88,14 +89,22 @@ public class ReactionMinigameController : MonoBehaviour
     {
         if (!_running) return;
         _running = false;
-        InputManager.Instance.SwitchToMainGame();
-        AdjustSuccessZone(success);
-        if (!success)
-        {
-            Events.IncreaseStress.Publish();
-        }
+
+        StartCoroutine(EndRoutine(success));
+    }
+
+    private IEnumerator EndRoutine(bool success)
+    {
+        yield return new WaitForSecondsRealtime(1f); 
+
         if (_panelRoot != null) _panelRoot.SetActive(false);
 
+        InputManager.Instance.SwitchToMainGame();
+
+        if (!success)
+            Events.IncreaseStress.Publish();
+
+        AdjustSuccessZone(success);
     }
 
     private void AdjustSuccessZone(bool success)
