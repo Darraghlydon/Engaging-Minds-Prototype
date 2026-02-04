@@ -38,6 +38,24 @@ public class ReactionMinigameController : MonoBehaviour
         _timeLimit = _defaultProfile.timeLimit;
     }
 
+    private void OnEnable()
+    {
+        Events.MinStressReached.Subscribe(ResetZoneValues);
+    }
+
+    private void OnDisable()
+    {
+        Events.MinStressReached.Unsubscribe(ResetZoneValues);
+    }
+
+    private void ResetZoneValues()
+    {
+        _zoneCenter = _resetProfile.zoneCenter;
+        _zoneSize = _resetProfile.zoneSize;
+        _speed = _resetProfile.speed;
+        _timeLimit = _resetProfile.timeLimit;
+    }
+
     private void Start()
     {
         InputManager.Instance.Actions.ReactionGame.Interact.performed += OnInteractPerformed;

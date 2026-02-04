@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NoiseManager : MonoBehaviour
@@ -44,12 +45,14 @@ public class NoiseManager : MonoBehaviour
     {
         Events.IncreaseStress.Subscribe(IncreaseRateMultiplier);
         Events.ReduceStress.Subscribe(ResetRateMultiplier);
+        Events.MinStressReached.Subscribe(ResetRateMultiplier);
     }
 
     private void OnDisable()
     {
         Events.IncreaseStress.Unsubscribe(IncreaseRateMultiplier);
         Events.ReduceStress.Unsubscribe(ResetRateMultiplier);
+        Events.MinStressReached.Unsubscribe(ResetRateMultiplier);
     }
 
     void IncreaseRateMultiplier()

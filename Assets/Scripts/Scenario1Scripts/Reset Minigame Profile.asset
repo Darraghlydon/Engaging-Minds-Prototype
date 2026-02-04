@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReactionMinigameProfile
   zoneCenter: 0.5
   zoneSize: 0.5
-  speed: 1
+  speed: 1.5
   timeLimit: 0

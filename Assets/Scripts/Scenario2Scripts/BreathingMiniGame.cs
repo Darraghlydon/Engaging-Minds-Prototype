@@ -25,7 +25,22 @@ public class BreathingMiniGame : MonoBehaviour
     private float mismatchTimer = 0f;
 
 
+    private void Start()
+    {
+        calmValue = 0;
+    }
+
     private void OnEnable()
+    {
+        Events.MinStressReached.Subscribe(ResetCalmValue);
+    }
+
+    private void OnDisable()
+    {
+        Events.MinStressReached.Unsubscribe(ResetCalmValue);
+    }
+
+    void ResetCalmValue()
     {
         calmValue = 0;
     }

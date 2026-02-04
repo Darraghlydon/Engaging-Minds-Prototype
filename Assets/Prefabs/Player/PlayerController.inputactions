@@ -1063,6 +1063,28 @@
                 },
                 {
                     "name": "",
+                    "id": "afcf162f-7321-4be8-967c-db9d1962aab5",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "Breathe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fbf97185-e0dc-40ba-ad22-fb8f5854a176",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "Scale(factor=-1)",
+                    "groups": "",
+                    "action": "Breathe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7aa6ef74-16da-419c-be5e-1a47690d6057",
                     "path": "<Gamepad>/start",
                     "interactions": "",
