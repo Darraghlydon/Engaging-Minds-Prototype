@@ -992,6 +992,67 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "BreathingGame",
+            "id": "7bf33dbb-57af-45ab-8dfa-233d06e8f557",
+            "actions": [
+                {
+                    "name": "Breathe",
+                    "type": "Value",
+                    "id": "d0fae293-e4d3-4294-9982-5a746329c680",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0193ba84-91ca-4da7-8b44-582af9073f5c",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "Breathe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dab9d688-2472-477e-a1c7-fe40303f954e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "",
+                    "action": "Breathe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ed479aff-871b-44e3-9c8a-6dff57153bfb",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "Scale(factor=-1)",
+                    "groups": "",
+                    "action": "Breathe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4194521e-3efd-4826-b5e9-13349538be8b",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "Scale(factor=-1)",
+                    "groups": "",
+                    "action": "Breathe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

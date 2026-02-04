@@ -34,7 +34,7 @@ public class FeatherFloat : MonoBehaviour
     {
         float cycleLength = inhaleTime + topHoldTime + exhaleTime + bottomHoldTime;
 
-        cycleTimer += Time.deltaTime;
+        cycleTimer += Time.unscaledDeltaTime;
         if (cycleTimer > cycleLength)
             cycleTimer -= cycleLength;
 
@@ -43,7 +43,7 @@ public class FeatherFloat : MonoBehaviour
 
         // WOBBLE (reduced when calm)
         float wobbleStrength = Mathf.Lerp(maxWobbleAmount, 1f, calmAmount);
-        float wobble = Mathf.Sin(Time.time * wobbleSpeed) * wobbleStrength;
+        float wobble = Mathf.Sin(Time.unscaledTime * wobbleSpeed) * wobbleStrength;
 
         float targetY = startPos.y + baseY + wobble;
 
@@ -51,13 +51,15 @@ public class FeatherFloat : MonoBehaviour
             transform.localPosition.y,
             targetY,
             ref velocityY,
-            smoothTime
+            smoothTime,
+            Mathf.Infinity,
+            Time.unscaledDeltaTime
         );
 
         transform.localPosition = new Vector3(startPos.x, newY, startPos.z);
 
         // Slight rotation wobble
-        float tilt = Mathf.Sin(Time.time * wobbleSpeed * 1.3f) * wobbleStrength * 0.3f;
+        float tilt = Mathf.Sin(Time.unscaledTime * wobbleSpeed * 1.3f) * wobbleStrength * 0.3f;
         transform.localRotation = Quaternion.Euler(0, 0, tilt);
     }
 

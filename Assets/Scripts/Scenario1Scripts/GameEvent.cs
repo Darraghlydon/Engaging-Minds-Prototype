@@ -96,4 +96,5 @@ public static class Events
     public static readonly GameEvent IncreaseStress = new();
     public static readonly GameEvent MaxStressReached = new();
     public static readonly GameEvent ReduceStress = new();
+    public static readonly GameEvent DisplayBreathingGame = new();
 }

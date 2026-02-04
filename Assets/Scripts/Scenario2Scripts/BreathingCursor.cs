@@ -7,20 +7,34 @@ public class BreathingCursor : MonoBehaviour
     public float minY = -200f;
     public float maxY = 200f;
 
-    private BreathingControls controls;
     private float inputValue;
     private Vector3 pos;
 
-    void Awake()
+    private void OnEnable()
     {
-        controls = new BreathingControls();
+        var actions = InputManager.Instance.Actions;
 
-        controls.BreathingGame.Breathe.performed += ctx => inputValue = ctx.ReadValue<float>();
-        controls.BreathingGame.Breathe.canceled += ctx => inputValue = 0f;
+        actions.BreathingGame.Breathe.performed += OnBreathePerformed;
+        actions.BreathingGame.Breathe.canceled += OnBreatheCanceled;
+
     }
 
-    void OnEnable() => controls.Enable();
-    void OnDisable() => controls.Disable();
+    private void OnDisable()
+    {
+        if (InputManager.Instance == null) return;
+
+        var actions = InputManager.Instance.Actions;
+        actions.BreathingGame.Breathe.performed -= OnBreathePerformed;
+        actions.BreathingGame.Breathe.canceled -= OnBreatheCanceled;
+
+        inputValue = 0f;
+    }
+
+    private void OnBreathePerformed(InputAction.CallbackContext ctx)
+        => inputValue = ctx.ReadValue<float>();
+
+    private void OnBreatheCanceled(InputAction.CallbackContext ctx)
+        => inputValue = 0f;
 
     void Start()
     {
@@ -29,7 +43,7 @@ public class BreathingCursor : MonoBehaviour
 
     void Update()
     {
-        pos.y += inputValue * moveSpeed * Time.deltaTime;
+        pos.y += inputValue * moveSpeed * Time.unscaledDeltaTime;
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
 
         transform.localPosition = pos;

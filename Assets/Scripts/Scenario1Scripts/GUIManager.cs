@@ -11,7 +11,8 @@ public enum UIState
     Pause,
     ControlMethodSelection,
     Credits,
-    MaxStress
+    MaxStress,
+    BreathingGame
 }
 
 public class GUIManager : MonoBehaviour
@@ -25,6 +26,7 @@ public class GUIManager : MonoBehaviour
     [SerializeField] private GameObject _defaultButtonControls;
     [SerializeField] private GameObject _maxStressScreen;
     [SerializeField] private GameObject _defaultButtonMaxStress;
+    [SerializeField] private GameObject _breathingGameScreen;
     [Header("Settings")]
     [SerializeField] private string _mainMenuSceneName;
 
@@ -58,11 +60,13 @@ public class GUIManager : MonoBehaviour
     {
         SetupNavigationForWebGL();
         Events.MaxStressReached.Subscribe(OnMaxStressReached);
+        Events.DisplayBreathingGame.Unsubscribe(DisplayBreathingGame);
     }
 
     void OnDisable()
     {
         Events.MaxStressReached.Unsubscribe(OnMaxStressReached);
+        Events.DisplayBreathingGame.Unsubscribe(DisplayBreathingGame);
 
     }
 
@@ -89,7 +93,7 @@ public class GUIManager : MonoBehaviour
                 break;
             case UIState.ControlMethodSelection:
                 _storedUIState = _currentState;
-                Pause();
+                //Pause();
                 _controlsScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonControls);
                 break;
@@ -106,6 +110,12 @@ public class GUIManager : MonoBehaviour
                 _maxStressScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
                 break;
+            case UIState.BreathingGame:
+                InputManager.Instance.SwitchToBreathingGame();
+                Pause();
+                _breathingGameScreen.SetActive(true);
+                break;
+
 
 
             default:
@@ -143,6 +153,15 @@ public class GUIManager : MonoBehaviour
         Events.Unpause.Publish();
     }
 
+    public void DisplayBreathingGame()
+    {
+        if (CheckForOpenScreens() == false)
+        {
+            CloseOpenScreens();
+            SwitchState(UIState.BreathingGame);
+        }
+    }
+
     public void DisplayPauseScreen(InputAction.CallbackContext context)
     {
         DisplayPauseScreen();
@@ -151,6 +170,7 @@ public class GUIManager : MonoBehaviour
     public void DisplayPauseScreen()
     {
         _previousMode = InputManager.Instance.CurrentMode;
+        Debug.Log("Pause Button Pressed");
         if (CheckForOpenScreens() == false)
         {
             CloseOpenScreens();
@@ -164,6 +184,7 @@ public class GUIManager : MonoBehaviour
         _pauseScreen.SetActive(false);
         _controlsScreen.SetActive(false);
         _maxStressScreen.SetActive(false);
+        _breathingGameScreen.SetActive(false);
 
         if (_storedUIState != UIState.Default)
         {

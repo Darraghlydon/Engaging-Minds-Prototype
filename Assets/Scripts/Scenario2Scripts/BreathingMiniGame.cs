@@ -28,12 +28,12 @@ public class BreathingMiniGame : MonoBehaviour
         if (isMatching)
         {
             Debug.Log("Matching");
-            calmValue += calmGainRate * Time.deltaTime;
+            calmValue += calmGainRate * Time.unscaledDeltaTime;
         }
         else
         {
             Debug.Log("Not Matching");
-            calmValue -= calmLossRate * Time.deltaTime;
+            calmValue -= calmLossRate * Time.unscaledDeltaTime;
         }
 
         calmValue = Mathf.Clamp01(calmValue);
