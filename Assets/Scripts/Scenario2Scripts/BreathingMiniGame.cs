@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,10 +17,18 @@ public class BreathingMiniGame : MonoBehaviour
     [SerializeField] private StressLevelController stressLevelController;
     [SerializeField] private float secondsPerStressDown = 1.5f;
     [SerializeField] private float secondsPerStressUp = 1.5f;
+    [SerializeField] private Color matchColor;
+    [SerializeField] private Color mismatchColor;
 
     private float calmValue = 0f; // 0 = panic, 1 = calm
-    private float stressReduceTimer = 0f;
-    private float stressTimer = 0f;
+    private float matchTimer = 0f;
+    private float mismatchTimer = 0f;
+
+
+    private void OnEnable()
+    {
+        calmValue = 0;
+    }
 
     void Update()
     {
@@ -31,30 +40,36 @@ public class BreathingMiniGame : MonoBehaviour
         //float match = Mathf.InverseLerp(0.4f, 0f, distance);
         Debug.Log(distance);
         bool isMatching = distance <= successRange;
+        float dt = Time.unscaledDeltaTime;
 
         if (isMatching)
         {
             Debug.Log("Matching");
-            calmValue += calmGainRate * Time.unscaledDeltaTime;
+            cursor.SetColor(matchColor);
+            calmValue += calmGainRate * dt;
 
-            stressTimer += Time.unscaledDeltaTime;
-            if (stressTimer >= secondsPerStressDown)
+            // Matching streak builds, mismatch streak resets
+            matchTimer += dt;
+            mismatchTimer = 0f;
+
+            if (matchTimer >= secondsPerStressDown)
             {
-                //stressTimer = 0;
-                stressTimer -= secondsPerStressDown;
+                matchTimer = 0f; // or: matchTimer -= secondsPerStressDown; (allows multiple ticks if dt is big)
                 stressLevelController.ReduceStress(1);
             }
         }
         else
         {
             Debug.Log("Not Matching");
+            cursor.SetColor(mismatchColor);
             calmValue -= calmLossRate * Time.unscaledDeltaTime;
 
-            stressTimer += Time.unscaledDeltaTime;
-            if (stressTimer >= secondsPerStressUp)
+            mismatchTimer += dt;
+            matchTimer = 0f;
+
+            if (mismatchTimer >= secondsPerStressUp)
             {
-                stressTimer -= secondsPerStressUp;
-                //stressTimer = 0;
+                mismatchTimer = 0f; // or: mismatchTimer -= secondsPerStressUp;
                 stressLevelController.AddStress(1);
             }
         }

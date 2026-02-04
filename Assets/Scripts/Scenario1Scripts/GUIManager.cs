@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -11,7 +12,7 @@ public enum UIState
     Pause,
     ControlMethodSelection,
     Credits,
-    MaxStress,
+    StressScreen,
     BreathingGame
 }
 
@@ -25,7 +26,10 @@ public class GUIManager : MonoBehaviour
     [SerializeField] private GameObject _controlsScreen;
     [SerializeField] private GameObject _defaultButtonControls;
     [SerializeField] private GameObject _maxStressScreen;
+    [SerializeField] private GameObject _maxStressPanel;
+    [SerializeField] private GameObject _minStressPanel;
     [SerializeField] private GameObject _defaultButtonMaxStress;
+    [SerializeField] private GameObject _defaultButtonMinStress;
     [SerializeField] private GameObject _breathingGameScreen;
     [Header("Settings")]
     [SerializeField] private string _mainMenuSceneName;
@@ -61,12 +65,14 @@ public class GUIManager : MonoBehaviour
     {
         SetupNavigationForWebGL();
         Events.MaxStressReached.Subscribe(OnMaxStressReached);
+        Events.MinStressReached.Subscribe(OnMinStressReached);
         Events.DisplayBreathingGame.Unsubscribe(DisplayBreathingGame);
     }
 
     void OnDisable()
     {
         Events.MaxStressReached.Unsubscribe(OnMaxStressReached);
+        Events.MinStressReached.Unsubscribe(OnMinStressReached);
         Events.DisplayBreathingGame.Unsubscribe(DisplayBreathingGame);
 
     }
@@ -103,7 +109,7 @@ public class GUIManager : MonoBehaviour
                 _startScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonStart);
                 break;
-            case UIState.MaxStress:
+            case UIState.StressScreen:
                 InputManager.Instance.SwitchToUI();
                 _maxStressScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
@@ -212,7 +218,7 @@ public class GUIManager : MonoBehaviour
     public void ResumeGame()
     {
         //DisableMouse();
-        CloseOpenScreens();
+        CloseAllScreens();
         Unpause();
         
 
@@ -225,19 +231,28 @@ public class GUIManager : MonoBehaviour
 
     private void OnMaxStressReached()
     {
-        // If already showing a blocking screen, ignore.
-        if (_currentState == UIState.MaxStress) return;
-
-        OpenMaxStressScreen();
-    }
-
-    private void OpenMaxStressScreen()
-    {
+        if (InputManager.Instance.CurrentMode != GameInputMode.MainGame) return;
         CloseOpenScreens();
-        _currentState = UIState.MaxStress;
-        SwitchState(_currentState);
+        _currentState = UIState.StressScreen;
+        _maxStressPanel.SetActive(true);
+        _minStressPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
+        SwitchState(_currentState);
     }
+
+
+    private void OnMinStressReached()
+    {
+        if (InputManager.Instance.CurrentMode != GameInputMode.BreathingGame) return;
+        CloseOpenScreens();
+        _currentState = UIState.StressScreen;
+        _minStressPanel.SetActive(true);
+        _maxStressPanel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(_defaultButtonMinStress);
+        SwitchState(_currentState);
+    }
+
+
 
     private void SetupNavigationForWebGL()
     {

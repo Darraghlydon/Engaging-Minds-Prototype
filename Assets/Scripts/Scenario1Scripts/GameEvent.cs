@@ -93,6 +93,7 @@ public static class Events
     // Subtitles
     public static readonly GameEvent IncreaseStress = new();
     public static readonly GameEvent MaxStressReached = new();
+    public static readonly GameEvent MinStressReached = new();
     public static readonly GameEvent ReduceStress = new();
     public static readonly GameEvent DisplayBreathingGame = new();
 }

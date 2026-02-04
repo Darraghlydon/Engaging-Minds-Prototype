@@ -1,5 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class BreathingCursor : MonoBehaviour
 {
@@ -7,8 +9,16 @@ public class BreathingCursor : MonoBehaviour
     public float minY = -200f;
     public float maxY = 200f;
 
+    [SerializeField] private Image cursorImage;
+
     private float inputValue;
     private Vector3 pos;
+
+    void Start()
+    {
+        //cursorImage = GetComponent<Image>();
+        pos = transform.localPosition;
+    }
 
     private void OnEnable()
     {
@@ -16,7 +26,7 @@ public class BreathingCursor : MonoBehaviour
 
         InputManager.Instance.Actions.BreathingGame.Breathe.performed += OnBreathePerformed;
         InputManager.Instance.Actions.BreathingGame.Breathe.canceled += OnBreatheCanceled;
-
+        
     }
 
     private void OnDisable()
@@ -41,17 +51,17 @@ public class BreathingCursor : MonoBehaviour
         inputValue = 0f;
     }
 
-    void Start()
-    {
-        pos = transform.localPosition;
-    }
-
     void Update()
     {
         pos.y += inputValue * moveSpeed * Time.unscaledDeltaTime;
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
 
         transform.localPosition = pos;
+    }
+
+    public void SetColor(Color cursorColour)
+    {
+        cursorImage.color = cursorColour;
     }
 
     public float GetNormalizedHeight()
