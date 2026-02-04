@@ -4,6 +4,7 @@ public enum GameInputMode
 {
     MainGame,
     ReactionGame,
+    BreathingGame,
     UI
 }
 public class InputManager : MonoBehaviour
@@ -31,28 +32,41 @@ public class InputManager : MonoBehaviour
     public void SwitchToMainGame()
     {
         DisableMouse();
-        Actions.UI.Disable();
-        Actions.ReactionGame.Disable();
+        Actions.Disable();
         Actions.MainGame.Enable();
+        GamePause.SetMode(PauseMode.None);
         CurrentMode = GameInputMode.MainGame;
+        Debug.Log("GameInput Mode: " + CurrentMode);
     }
 
     public void SwitchToReactionGame()
     {
         DisableMouse();
-        Actions.UI.Disable();
-        Actions.MainGame.Disable();
+        Actions.Disable();
         Actions.ReactionGame.Enable();
+        GamePause.SetMode(PauseMode.WorldOnly);
         CurrentMode = GameInputMode.ReactionGame;
+        Debug.Log("GameInput Mode: " + CurrentMode);
     }
 
     public void SwitchToUI()
     {
         EnableMouse();
-        Actions.MainGame.Disable();
-        Actions.ReactionGame.Disable();
+        Actions.Disable();
         Actions.UI.Enable();
+        GamePause.SetMode(PauseMode.Hard);
         CurrentMode = GameInputMode.UI;
+        Debug.Log("GameInput Mode: " + CurrentMode);
+    }
+
+    public void SwitchToBreathingGame()
+    {
+        EnableMouse();
+        Actions.Disable();
+        Actions.BreathingGame.Enable();
+        GamePause.SetMode(PauseMode.WorldOnly);
+        CurrentMode = GameInputMode.BreathingGame;
+        Debug.Log("GameInput Mode: " + CurrentMode);
     }
 
     void DisableMouse()

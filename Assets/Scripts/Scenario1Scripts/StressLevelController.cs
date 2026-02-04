@@ -23,13 +23,15 @@ public class StressLevelController : MonoBehaviour
     public int CurrentStress { get; private set; }
 
     private float _displayFill; 
-    private float _targetFill; 
+    private float _targetFill;
+    private bool _initialized;
 
     void Start()
     {
         SetStress(0);
         _displayFill = _targetFill;
         ApplyFill(_displayFill);
+        _initialized = true;
     }
 
     void Awake()
@@ -72,12 +74,19 @@ public class StressLevelController : MonoBehaviour
     public void SetStress(int value)
     {
         CurrentStress = Mathf.Clamp(value, 0, _maxStress);
+        if (!_initialized) return;
+        Debug.Log("Current Stress: " + CurrentStress);
         _targetFill = (_maxStress <= 0) ? 0f : (float)CurrentStress / _maxStress;
         float normalized = (_maxStress <= 0) ? 0f : (float)CurrentStress / _maxStress;
         StartCoroutine(AnimateFill(_displayFill, _targetFill));
         if (CurrentStress>=_maxStress)
         {
             Events.MaxStressReached.Publish();
+        }
+        if (CurrentStress <= 0)
+        {
+            Debug.Log("MinStressReached");
+            Events.MinStressReached.Publish();
         }
     }
 

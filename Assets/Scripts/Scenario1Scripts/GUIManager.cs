@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public enum UIState
 {
@@ -11,7 +12,8 @@ public enum UIState
     Pause,
     ControlMethodSelection,
     Credits,
-    MaxStress
+    StressScreen,
+    BreathingGame
 }
 
 public class GUIManager : MonoBehaviour
@@ -24,7 +26,11 @@ public class GUIManager : MonoBehaviour
     [SerializeField] private GameObject _controlsScreen;
     [SerializeField] private GameObject _defaultButtonControls;
     [SerializeField] private GameObject _maxStressScreen;
+    [SerializeField] private GameObject _maxStressPanel;
+    [SerializeField] private GameObject _minStressPanel;
     [SerializeField] private GameObject _defaultButtonMaxStress;
+    [SerializeField] private GameObject _defaultButtonMinStress;
+    [SerializeField] private GameObject _breathingGameScreen;
     [Header("Settings")]
     [SerializeField] private string _mainMenuSceneName;
 
@@ -43,7 +49,7 @@ public class GUIManager : MonoBehaviour
 
     public void Start()
     {
-        CloseOpenScreens();
+        CloseAllScreens();
         _currentState = UIState.Start;
         SwitchState(_currentState);
         InputManager.Instance.SwitchToUI();
@@ -51,6 +57,7 @@ public class GUIManager : MonoBehaviour
         
         InputManager.Instance.Actions.MainGame.Menu.performed += DisplayPauseScreen;
         InputManager.Instance.Actions.ReactionGame.Menu.performed += DisplayPauseScreen;
+        InputManager.Instance.Actions.BreathingGame.Menu.performed += DisplayPauseScreen;
     }
 
 
@@ -58,11 +65,15 @@ public class GUIManager : MonoBehaviour
     {
         SetupNavigationForWebGL();
         Events.MaxStressReached.Subscribe(OnMaxStressReached);
+        Events.MinStressReached.Subscribe(OnMinStressReached);
+        Events.DisplayBreathingGame.Unsubscribe(DisplayBreathingGame);
     }
 
     void OnDisable()
     {
         Events.MaxStressReached.Unsubscribe(OnMaxStressReached);
+        Events.MinStressReached.Unsubscribe(OnMinStressReached);
+        Events.DisplayBreathingGame.Unsubscribe(DisplayBreathingGame);
 
     }
 
@@ -73,6 +84,7 @@ public class GUIManager : MonoBehaviour
         {
             InputManager.Instance.Actions.MainGame.Menu.performed -= DisplayPauseScreen;
             InputManager.Instance.Actions.ReactionGame.Menu.performed -= DisplayPauseScreen;
+            InputManager.Instance.Actions.BreathingGame.Menu.performed -= DisplayPauseScreen;
         }
 
     }
@@ -83,64 +95,62 @@ public class GUIManager : MonoBehaviour
         {
 
             case UIState.Pause:
-                Pause();
+                InputManager.Instance.SwitchToUI();
                 _pauseScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonPause);
                 break;
             case UIState.ControlMethodSelection:
                 _storedUIState = _currentState;
-                Pause();
                 _controlsScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonControls);
                 break;
-
             case UIState.Start:
                 InputManager.Instance.SwitchToUI();
-                Pause();
                 _startScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonStart);
                 break;
-            case UIState.MaxStress:
+            case UIState.StressScreen:
                 InputManager.Instance.SwitchToUI();
-                Pause();
                 _maxStressScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
                 break;
-
-
+            case UIState.BreathingGame:
+                InputManager.Instance.SwitchToBreathingGame();
+                _breathingGameScreen.SetActive(true);
+                break;
             default:
-
                 Unpause();
                 break;
         }
         _currentState = newState;
     }
 
-    void Pause()
-    {
-        Time.timeScale = 0;
-        //AudioListener.pause = true;
-        
-        Debug.Log(_previousMode);
-        InputManager.Instance.SwitchToUI();
-        Events.Pause.Publish();
-    }
-
     void Unpause()
     {
-        Time.timeScale = 1;
-        //AudioListener.pause = false;
         switch (_previousMode)
         {
             case GameInputMode.MainGame:
                 InputManager.Instance.SwitchToMainGame();
+                Time.timeScale = 1;
                 break;
 
             case GameInputMode.ReactionGame:
                 InputManager.Instance.SwitchToReactionGame();
                 break;
+
+            case GameInputMode.BreathingGame:
+                InputManager.Instance.SwitchToBreathingGame();
+                break;
         }
-        Events.Unpause.Publish();
+    }
+
+    public void DisplayBreathingGame()
+    {
+        if (CheckForOpenScreens() == false)
+        {
+            CloseOpenScreens(); 
+            SwitchState(UIState.BreathingGame);
+        }
     }
 
     public void DisplayPauseScreen(InputAction.CallbackContext context)
@@ -172,6 +182,15 @@ public class GUIManager : MonoBehaviour
         }
     }
 
+    public void CloseAllScreens()
+    {
+        _startScreen.SetActive(false);
+        _pauseScreen.SetActive(false);
+        _controlsScreen.SetActive(false);
+        _maxStressScreen.SetActive(false);
+        _breathingGameScreen.SetActive(false);
+    }
+
     public void DisplayControlMethodScreen()
     {
         CloseOpenScreens();
@@ -199,7 +218,7 @@ public class GUIManager : MonoBehaviour
     public void ResumeGame()
     {
         //DisableMouse();
-        CloseOpenScreens();
+        CloseAllScreens();
         Unpause();
         
 
@@ -212,19 +231,27 @@ public class GUIManager : MonoBehaviour
 
     private void OnMaxStressReached()
     {
-        // If already showing a blocking screen, ignore.
-        if (_currentState == UIState.MaxStress) return;
-
-        OpenMaxStressScreen();
-    }
-
-    private void OpenMaxStressScreen()
-    {
-        CloseOpenScreens();
-        _currentState = UIState.MaxStress;
-        SwitchState(_currentState);
+        if (InputManager.Instance.CurrentMode != GameInputMode.MainGame) return;
+        CloseAllScreens();
+        _currentState = UIState.StressScreen;
+        _maxStressPanel.SetActive(true);
+        _minStressPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
+        SwitchState(_currentState);
     }
+
+       private void OnMinStressReached()
+    {
+        if (InputManager.Instance.CurrentMode != GameInputMode.BreathingGame) return;
+        CloseAllScreens();
+        _currentState = UIState.StressScreen;
+        _minStressPanel.SetActive(true);
+        _maxStressPanel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(_defaultButtonMinStress);
+        SwitchState(_currentState);
+    }
+
+
 
     private void SetupNavigationForWebGL()
     {
