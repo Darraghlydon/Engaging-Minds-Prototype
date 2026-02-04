@@ -232,7 +232,7 @@ public class GUIManager : MonoBehaviour
     private void OnMaxStressReached()
     {
         if (InputManager.Instance.CurrentMode != GameInputMode.MainGame) return;
-        CloseOpenScreens();
+        CloseAllScreens();
         _currentState = UIState.StressScreen;
         _maxStressPanel.SetActive(true);
         _minStressPanel.SetActive(false);
@@ -244,7 +244,7 @@ public class GUIManager : MonoBehaviour
     private void OnMinStressReached()
     {
         if (InputManager.Instance.CurrentMode != GameInputMode.BreathingGame) return;
-        CloseOpenScreens();
+        CloseAllScreens();
         _currentState = UIState.StressScreen;
         _minStressPanel.SetActive(true);
         _maxStressPanel.SetActive(false);
