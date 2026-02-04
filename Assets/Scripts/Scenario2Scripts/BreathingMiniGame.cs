@@ -13,34 +13,10 @@ public class BreathingMiniGame : MonoBehaviour
     public float calmLossRate = 0.25f;   // How fast calm decreases
 
     private float calmValue = 0f; // 0 = panic, 1 = calm
-    private bool paused ; // Screen Paused
-
-    private void OnEnable()
-    {
-        Events.Pause.Subscribe(OnPause);
-        Events.Unpause.Subscribe(OnUnpaused);
-    }
-
-    private void OnDisable()
-    {
-        Events.Pause.Unsubscribe(OnPause);
-        Events.Unpause.Unsubscribe(OnUnpaused);
-    }
-
-    void OnPause()
-    {
-        paused = true;
-    }
-
-    void OnUnpaused()
-    {
-        paused = false;
-    }
-
 
     void Update()
     {
-        if (!paused)
+        if (GamePause.Mode != PauseMode.Hard)
         {
             float featherPos = feather.GetNormalizedBreath();
             float playerPos = cursor.GetNormalizedHeight();

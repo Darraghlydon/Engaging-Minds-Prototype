@@ -91,8 +91,6 @@ public static class Events
     public static readonly GameEvent AudioSkip = new(); // global command
 
     // Subtitles
-    public static readonly GameEvent Pause = new();
-    public static readonly GameEvent Unpause = new();
     public static readonly GameEvent IncreaseStress = new();
     public static readonly GameEvent MaxStressReached = new();
     public static readonly GameEvent ReduceStress = new();

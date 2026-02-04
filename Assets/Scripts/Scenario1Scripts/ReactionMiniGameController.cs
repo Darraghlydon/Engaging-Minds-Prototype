@@ -24,7 +24,6 @@ public class ReactionMinigameController : MonoBehaviour
     private float _direction = 1f;   // +1 up, -1 down
     private float _elapsed;
     private bool _running;
-    private bool _paused;
     private float _zoneCenter;
     private float _zoneSize;
     private float _speed;
@@ -44,27 +43,6 @@ public class ReactionMinigameController : MonoBehaviour
         InputManager.Instance.Actions.ReactionGame.Interact.performed += OnInteractPerformed;
     }
 
-    private void OnEnable()
-    {
-        Events.Pause.Subscribe(OnPause);
-        Events.Unpause.Subscribe(OnUnpaused);
-    }
-
-    private void OnDisable()
-    {
-        Events.Pause.Unsubscribe(OnPause);
-        Events.Unpause.Unsubscribe(OnUnpaused);
-    }
-
-    void OnPause()
-    {
-        _paused = true;
-    }
-
-    void OnUnpaused()
-    {
-        _paused = false;
-    }
 
     void OnDestroy()
     {
@@ -78,8 +56,6 @@ public class ReactionMinigameController : MonoBehaviour
     public void Show()
     {
         InputManager.Instance.SwitchToReactionGame();
-        Time.timeScale = 0f;
-
         _arrowPosition = UnityEngine.Random.value;
         _direction = 1f;
         _elapsed = 0f;
@@ -94,7 +70,6 @@ public class ReactionMinigameController : MonoBehaviour
     {
         if (!_running) return;
         _running = false;
-        Time.timeScale = 1f;
         InputManager.Instance.SwitchToMainGame();
         AdjustSuccessZone(success);
         if (!success)
@@ -119,7 +94,7 @@ public class ReactionMinigameController : MonoBehaviour
 
     void Update()
     {
-        if (!_running || _paused) return;
+        if (!_running || GamePause.Mode != PauseMode.WorldOnly) return;
 
         // Move arrow up/down
         float delta = _speed * Time.unscaledDeltaTime; // unscaled for UI minigame
@@ -141,7 +116,7 @@ public class ReactionMinigameController : MonoBehaviour
 
     private void OnInteractPerformed(InputAction.CallbackContext ctx)
     {
-        if (!_running || _paused) return;
+        if (!_running || GamePause.Mode != PauseMode.WorldOnly) return;
 
         // success if arrow is within zone
         float half = _zoneSize * 0.5f;

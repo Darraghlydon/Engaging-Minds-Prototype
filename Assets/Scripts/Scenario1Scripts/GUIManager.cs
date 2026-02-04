@@ -90,55 +90,37 @@ public class GUIManager : MonoBehaviour
 
             case UIState.Pause:
                 InputManager.Instance.SwitchToUI();
-                Pause();
                 _pauseScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonPause);
                 break;
             case UIState.ControlMethodSelection:
                 _storedUIState = _currentState;
-                //Pause();
                 _controlsScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonControls);
                 break;
-
             case UIState.Start:
                 InputManager.Instance.SwitchToUI();
-                Pause();
                 _startScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonStart);
                 break;
             case UIState.MaxStress:
                 InputManager.Instance.SwitchToUI();
-                Pause();
                 _maxStressScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonMaxStress);
                 break;
             case UIState.BreathingGame:
                 InputManager.Instance.SwitchToBreathingGame();
-                Pause();
                 _breathingGameScreen.SetActive(true);
                 break;
-
-
-
             default:
-
                 Unpause();
                 break;
         }
         _currentState = newState;
     }
 
-    void Pause()
-    {
-        Time.timeScale = 0;      
-        Debug.Log(_previousMode);
-        Events.Pause.Publish();
-    }
-
     void Unpause()
     {
-        Debug.Log("Previous Mode: " + _previousMode);
         switch (_previousMode)
         {
             case GameInputMode.MainGame:
@@ -154,14 +136,13 @@ public class GUIManager : MonoBehaviour
                 InputManager.Instance.SwitchToBreathingGame();
                 break;
         }
-        Events.Unpause.Publish();
     }
 
     public void DisplayBreathingGame()
     {
         if (CheckForOpenScreens() == false)
         {
-            CloseOpenScreens();
+            CloseOpenScreens(); 
             SwitchState(UIState.BreathingGame);
         }
     }
@@ -174,7 +155,6 @@ public class GUIManager : MonoBehaviour
     public void DisplayPauseScreen()
     {
         _previousMode = InputManager.Instance.CurrentMode;
-        Debug.Log("Pause Button Pressed");
         if (CheckForOpenScreens() == false)
         {
             CloseOpenScreens();

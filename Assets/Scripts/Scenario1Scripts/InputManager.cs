@@ -36,7 +36,9 @@ public class InputManager : MonoBehaviour
         Actions.ReactionGame.Disable();
         Actions.BreathingGame.Disable();
         Actions.MainGame.Enable();
+        GamePause.SetMode(PauseMode.None);
         CurrentMode = GameInputMode.MainGame;
+        Debug.Log("GameInput Mode: " + CurrentMode);
     }
 
     public void SwitchToReactionGame()
@@ -46,7 +48,9 @@ public class InputManager : MonoBehaviour
         Actions.MainGame.Disable();
         Actions.BreathingGame.Disable();
         Actions.ReactionGame.Enable();
+        GamePause.SetMode(PauseMode.WorldOnly);
         CurrentMode = GameInputMode.ReactionGame;
+        Debug.Log("GameInput Mode: " + CurrentMode);
     }
 
     public void SwitchToUI()
@@ -56,7 +60,9 @@ public class InputManager : MonoBehaviour
         Actions.ReactionGame.Disable();
         Actions.BreathingGame.Disable();
         Actions.UI.Enable();
+        GamePause.SetMode(PauseMode.Hard);
         CurrentMode = GameInputMode.UI;
+        Debug.Log("GameInput Mode: " + CurrentMode);
     }
 
     public void SwitchToBreathingGame()
@@ -66,7 +72,9 @@ public class InputManager : MonoBehaviour
         Actions.ReactionGame.Disable();
         Actions.UI.Disable();
         Actions.BreathingGame.Enable();
+        GamePause.SetMode(PauseMode.WorldOnly);
         CurrentMode = GameInputMode.BreathingGame;
+        Debug.Log("GameInput Mode: " + CurrentMode);
     }
 
     void DisableMouse()

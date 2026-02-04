@@ -32,35 +32,38 @@ public class FeatherFloat : MonoBehaviour
 
     void Update()
     {
-        float cycleLength = inhaleTime + topHoldTime + exhaleTime + bottomHoldTime;
+        if (GamePause.Mode != PauseMode.Hard)
+        {
+            float cycleLength = inhaleTime + topHoldTime + exhaleTime + bottomHoldTime;
 
-        cycleTimer += Time.unscaledDeltaTime;
-        if (cycleTimer > cycleLength)
-            cycleTimer -= cycleLength;
+            cycleTimer += Time.unscaledDeltaTime;
+            if (cycleTimer > cycleLength)
+                cycleTimer -= cycleLength;
 
-        float normalizedHeight = GetBreathValue(cycleTimer);
-        float baseY = Mathf.Lerp(-amplitude, amplitude, normalizedHeight);
+            float normalizedHeight = GetBreathValue(cycleTimer);
+            float baseY = Mathf.Lerp(-amplitude, amplitude, normalizedHeight);
 
-        // WOBBLE (reduced when calm)
-        float wobbleStrength = Mathf.Lerp(maxWobbleAmount, 1f, calmAmount);
-        float wobble = Mathf.Sin(Time.unscaledTime * wobbleSpeed) * wobbleStrength;
+            // WOBBLE (reduced when calm)
+            float wobbleStrength = Mathf.Lerp(maxWobbleAmount, 1f, calmAmount);
+            float wobble = Mathf.Sin(Time.unscaledTime * wobbleSpeed) * wobbleStrength;
 
-        float targetY = startPos.y + baseY + wobble;
+            float targetY = startPos.y + baseY + wobble;
 
-        float newY = Mathf.SmoothDamp(
-            transform.localPosition.y,
-            targetY,
-            ref velocityY,
-            smoothTime,
-            Mathf.Infinity,
-            Time.unscaledDeltaTime
-        );
+            float newY = Mathf.SmoothDamp(
+                transform.localPosition.y,
+                targetY,
+                ref velocityY,
+                smoothTime,
+                Mathf.Infinity,
+                Time.unscaledDeltaTime
+            );
 
-        transform.localPosition = new Vector3(startPos.x, newY, startPos.z);
+            transform.localPosition = new Vector3(startPos.x, newY, startPos.z);
 
-        // Slight rotation wobble
-        float tilt = Mathf.Sin(Time.unscaledTime * wobbleSpeed * 1.3f) * wobbleStrength * 0.3f;
-        transform.localRotation = Quaternion.Euler(0, 0, tilt);
+            // Slight rotation wobble
+            float tilt = Mathf.Sin(Time.unscaledTime * wobbleSpeed * 1.3f) * wobbleStrength * 0.3f;
+            transform.localRotation = Quaternion.Euler(0, 0, tilt);
+        }
     }
 
     float GetBreathValue(float t)
