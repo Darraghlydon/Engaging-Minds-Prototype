@@ -13,37 +13,64 @@ public class BreathingMiniGame : MonoBehaviour
     public float calmLossRate = 0.25f;   // How fast calm decreases
 
     private float calmValue = 0f; // 0 = panic, 1 = calm
+    private bool paused ; // Screen Paused
+
+    private void OnEnable()
+    {
+        Events.Pause.Subscribe(OnPause);
+        Events.Unpause.Subscribe(OnUnpaused);
+    }
+
+    private void OnDisable()
+    {
+        Events.Pause.Unsubscribe(OnPause);
+        Events.Unpause.Unsubscribe(OnUnpaused);
+    }
+
+    void OnPause()
+    {
+        paused = true;
+    }
+
+    void OnUnpaused()
+    {
+        paused = false;
+    }
+
 
     void Update()
     {
-        float featherPos = feather.GetNormalizedBreath();
-        float playerPos = cursor.GetNormalizedHeight();
-
-        float distance = Mathf.Abs(featherPos - playerPos);
-
-        float match = Mathf.InverseLerp(0.4f, 0f, distance);
-
-        bool isMatching = distance <= successRange;
-
-        if (isMatching)
+        if (!paused)
         {
-            Debug.Log("Matching");
-            calmValue += calmGainRate * Time.unscaledDeltaTime;
-        }
-        else
-        {
-            Debug.Log("Not Matching");
-            calmValue -= calmLossRate * Time.unscaledDeltaTime;
-        }
+            float featherPos = feather.GetNormalizedBreath();
+            float playerPos = cursor.GetNormalizedHeight();
 
-        calmValue = Mathf.Clamp01(calmValue);
-        calmSlider.value = calmValue;
+            float distance = Mathf.Abs(featherPos - playerPos);
+
+            float match = Mathf.InverseLerp(0.4f, 0f, distance);
+
+            bool isMatching = distance <= successRange;
+
+            if (isMatching)
+            {
+                //Debug.Log("Matching");
+                calmValue += calmGainRate * Time.unscaledDeltaTime;
+            }
+            else
+            {
+                //Debug.Log("Not Matching");
+                calmValue -= calmLossRate * Time.unscaledDeltaTime;
+            }
+
+            calmValue = Mathf.Clamp01(calmValue);
+            calmSlider.value = calmValue;
 
 
 
-        if (calmValue >= 1f)
-        {
-            OnCalmedDown();
+            if (calmValue >= 1f)
+            {
+                OnCalmedDown();
+            }
         }
     }
 

@@ -45,7 +45,7 @@ public class GUIManager : MonoBehaviour
 
     public void Start()
     {
-        CloseOpenScreens();
+        CloseAllScreens();
         _currentState = UIState.Start;
         SwitchState(_currentState);
         InputManager.Instance.SwitchToUI();
@@ -53,6 +53,7 @@ public class GUIManager : MonoBehaviour
         
         InputManager.Instance.Actions.MainGame.Menu.performed += DisplayPauseScreen;
         InputManager.Instance.Actions.ReactionGame.Menu.performed += DisplayPauseScreen;
+        InputManager.Instance.Actions.BreathingGame.Menu.performed += DisplayPauseScreen;
     }
 
 
@@ -77,6 +78,7 @@ public class GUIManager : MonoBehaviour
         {
             InputManager.Instance.Actions.MainGame.Menu.performed -= DisplayPauseScreen;
             InputManager.Instance.Actions.ReactionGame.Menu.performed -= DisplayPauseScreen;
+            InputManager.Instance.Actions.BreathingGame.Menu.performed -= DisplayPauseScreen;
         }
 
     }
@@ -87,6 +89,7 @@ public class GUIManager : MonoBehaviour
         {
 
             case UIState.Pause:
+                InputManager.Instance.SwitchToUI();
                 Pause();
                 _pauseScreen.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(_defaultButtonPause);
@@ -128,26 +131,27 @@ public class GUIManager : MonoBehaviour
 
     void Pause()
     {
-        Time.timeScale = 0;
-        //AudioListener.pause = true;
-        
+        Time.timeScale = 0;      
         Debug.Log(_previousMode);
-        InputManager.Instance.SwitchToUI();
         Events.Pause.Publish();
     }
 
     void Unpause()
     {
-        Time.timeScale = 1;
-        //AudioListener.pause = false;
+        Debug.Log("Previous Mode: " + _previousMode);
         switch (_previousMode)
         {
             case GameInputMode.MainGame:
                 InputManager.Instance.SwitchToMainGame();
+                Time.timeScale = 1;
                 break;
 
             case GameInputMode.ReactionGame:
                 InputManager.Instance.SwitchToReactionGame();
+                break;
+
+            case GameInputMode.BreathingGame:
+                InputManager.Instance.SwitchToBreathingGame();
                 break;
         }
         Events.Unpause.Publish();
@@ -184,13 +188,21 @@ public class GUIManager : MonoBehaviour
         _pauseScreen.SetActive(false);
         _controlsScreen.SetActive(false);
         _maxStressScreen.SetActive(false);
-        _breathingGameScreen.SetActive(false);
 
         if (_storedUIState != UIState.Default)
         {
             SwitchState(_storedUIState);
             _storedUIState = UIState.Default;
         }
+    }
+
+    public void CloseAllScreens()
+    {
+        _startScreen.SetActive(false);
+        _pauseScreen.SetActive(false);
+        _controlsScreen.SetActive(false);
+        _maxStressScreen.SetActive(false);
+        _breathingGameScreen.SetActive(false);
     }
 
     public void DisplayControlMethodScreen()

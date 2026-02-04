@@ -4,6 +4,7 @@ public enum GameInputMode
 {
     MainGame,
     ReactionGame,
+    BreathingGame,
     UI
 }
 public class InputManager : MonoBehaviour
@@ -65,7 +66,7 @@ public class InputManager : MonoBehaviour
         Actions.ReactionGame.Disable();
         Actions.UI.Disable();
         Actions.BreathingGame.Enable();
-        CurrentMode = GameInputMode.UI;
+        CurrentMode = GameInputMode.BreathingGame;
     }
 
     void DisableMouse()
