@@ -1,0 +1,1 @@
+﻿{"inkVersion":21,"root":[[{"->":"CompleteDialog"},["done",{"#f":5,"#n":"g-0"}],null],"done",{"CompleteDialog":[["^Thanks for you help!","\n","ev","str","^No Problem","/str","/ev",{"*":".^.c-0","flg":20},{"c-0":["\n","end",{"#f":5}]}],{"#f":1}],"#f":1}],"listDefs":{}}

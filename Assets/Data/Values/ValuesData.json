@@ -1,0 +1,70 @@
+{
+  "values": [
+    {
+      "id": "safety",
+      "displayName": "Safety",
+      "valueIconKey": "icon_value_safety",
+      "dialogMessageKey": "Can you double-check this before we send it out? I’d rather be absolutely sure nothing goes wrong.",
+      "anti": {
+        "id": "catastrophising",
+        "displayName": "Catastrophising",
+        "antiIconKey": "icon_value_anti_safety"
+      }
+    },
+    {
+      "id": "teamwork",
+      "displayName": "Teamwork",
+      "valueIconKey": "icon_value_teamwork",
+      "dialogMessageKey": "We’re all counting on you for this part — it really affects how the rest of us come across.",
+      "anti": {
+        "id": "rejection_sensitivity",
+        "displayName": "Rejection Sensitivity",
+        "antiIconKey": "icon_value_anti_teamwork"
+      }
+    },
+    {
+      "id": "respect",
+      "displayName": "Care & Respect",
+      "valueIconKey": "icon_value_care",
+      "dialogMessageKey": "I don’t want to step on your toes, but can you double-check this is the right approach?",
+      "anti": {
+        "id": "self_doubt",
+        "displayName": "Self-Doubt",
+        "antiIconKey": "icon_value_anti_care"
+      }
+    },
+    {
+      "id": "learning",
+      "displayName": "Learning",
+      "valueIconKey": "icon_value_learning",
+      "dialogMessageKey": "This is a bit outside your comfort zone, but it’d be good for you to take it on and figure it out.",
+      "anti": {
+        "id": "defiance",
+        "displayName": "Defiance",
+        "antiIconKey": "icon_value_anti_learning"
+      }
+    },
+    {
+      "id": "fairness",
+      "displayName": "Fairness",
+      "valueIconKey": "icon_value_fairness",
+      "dialogMessageKey": "I know it’s short notice, but can you handle this as well? Everyone else is swamped.",
+      "anti": {
+        "id": "resentment",
+        "displayName": "Resentment",
+        "antiIconKey": "icon_value_anti_fairness"
+      }
+    },
+    {
+      "id": "courage",
+      "displayName": "Courage",
+      "valueIconKey": "icon_value_courage",
+      "dialogMessageKey": "Would you be willing to speak up about this in the meeting? It might be uncomfortable, but it matters.",
+      "anti": {
+        "id": "fear",
+        "displayName": "Fear",
+        "antiIconKey": "icon_value_anti_courage"
+      }
+    }
+  ]
+}
