@@ -51,6 +51,7 @@ public class GUIManager : MonoBehaviour
     {
         CloseAllScreens();
         _currentState = UIState.Start;
+        //_currentState = UIState.Default;
         SwitchState(_currentState);
         InputManager.Instance.SwitchToUI();
         _previousMode = GameInputMode.MainGame;
@@ -125,7 +126,7 @@ public class GUIManager : MonoBehaviour
         _currentState = newState;
     }
 
-    void Unpause()
+    public void Unpause()
     {
         switch (_previousMode)
         {
@@ -218,7 +219,7 @@ public class GUIManager : MonoBehaviour
     public void ResumeGame()
     {
         //DisableMouse();
-        CloseAllScreens();
+        CloseOpenScreens();
         Unpause();
         
 
@@ -226,8 +227,12 @@ public class GUIManager : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene(_mainMenuSceneName);
+        //SceneManager.LoadScene(_mainMenuSceneName);
+        var gm = GameManager.Instance;
+        if (gm == null) return;
+        gm.SetLevelState(LevelState.Office);
     }
+
 
     private void OnMaxStressReached()
     {
@@ -242,8 +247,11 @@ public class GUIManager : MonoBehaviour
 
        private void OnMinStressReached()
     {
+
         if (InputManager.Instance.CurrentMode != GameInputMode.BreathingGame) return;
         CloseAllScreens();
+        InputManager.Instance.SwitchToMainGame();
+        _previousMode = InputManager.Instance.CurrentMode;
         _currentState = UIState.StressScreen;
         _minStressPanel.SetActive(true);
         _maxStressPanel.SetActive(false);

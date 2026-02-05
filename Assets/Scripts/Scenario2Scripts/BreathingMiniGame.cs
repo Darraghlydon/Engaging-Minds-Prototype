@@ -47,63 +47,66 @@ public class BreathingMiniGame : MonoBehaviour
 
     void Update()
     {
-        float featherPos = feather.GetNormalizedBreath();
-        float playerPos = cursor.GetNormalizedHeight();
-
-        float distance = Mathf.Abs(featherPos - playerPos);
-
-        //float match = Mathf.InverseLerp(0.4f, 0f, distance);
-        Debug.Log(distance);
-        bool isMatching = distance <= successRange;
-        float dt = Time.unscaledDeltaTime;
-
-        if (isMatching)
+        if (!GamePause.HardPaused)
         {
-            Debug.Log("Matching");
-            cursor.SetColor(matchColor);
-            calmValue += calmGainRate * dt;
+            float featherPos = feather.GetNormalizedBreath();
+            float playerPos = cursor.GetNormalizedHeight();
 
-            // Matching streak builds, mismatch streak resets
-            matchTimer += dt;
-            mismatchTimer = 0f;
+            float distance = Mathf.Abs(featherPos - playerPos);
 
-            if (matchTimer >= secondsPerStressDown)
+            //float match = Mathf.InverseLerp(0.4f, 0f, distance);
+            Debug.Log(distance);
+            bool isMatching = distance <= successRange;
+            float dt = Time.unscaledDeltaTime;
+
+            if (isMatching)
             {
-                matchTimer = 0f; // or: matchTimer -= secondsPerStressDown; (allows multiple ticks if dt is big)
-                stressLevelController.ReduceStress(1);
+                Debug.Log("Matching");
+                cursor.SetColor(matchColor);
+                calmValue += calmGainRate * dt;
+
+                // Matching streak builds, mismatch streak resets
+                matchTimer += dt;
+                mismatchTimer = 0f;
+
+                if (matchTimer >= secondsPerStressDown)
+                {
+                    matchTimer = 0f; // or: matchTimer -= secondsPerStressDown; (allows multiple ticks if dt is big)
+                    stressLevelController.ReduceStress(1);
+                }
+            }
+            else
+            {
+                Debug.Log("Not Matching");
+                cursor.SetColor(mismatchColor);
+                calmValue -= calmLossRate * Time.unscaledDeltaTime;
+
+                mismatchTimer += dt;
+                matchTimer = 0f;
+
+                if (mismatchTimer >= secondsPerStressUp)
+                {
+                    mismatchTimer = 0f; // or: mismatchTimer -= secondsPerStressUp;
+                    stressLevelController.AddStress(1);
+                }
+            }
+
+            calmValue = Mathf.Clamp01(calmValue);
+            calmSlider.value = calmValue;
+
+
+
+            if (calmValue >= 1f)
+            {
+                OnCalmedDown();
             }
         }
-        else
+
+        void OnCalmedDown()
         {
-            Debug.Log("Not Matching");
-            cursor.SetColor(mismatchColor);
-            calmValue -= calmLossRate * Time.unscaledDeltaTime;
-
-            mismatchTimer += dt;
-            matchTimer = 0f;
-
-            if (mismatchTimer >= secondsPerStressUp)
-            {
-                mismatchTimer = 0f; // or: mismatchTimer -= secondsPerStressUp;
-                stressLevelController.AddStress(1);
-            }
+            Debug.Log("Player calmed down :)");
+            // Disable minigame, resume normal gameplay, etc.
+            enabled = false;
         }
-
-        calmValue = Mathf.Clamp01(calmValue);
-        calmSlider.value = calmValue;
-
-
-
-        if (calmValue >= 1f)
-        {
-            OnCalmedDown();
-        }
-    }
-
-    void OnCalmedDown()
-    {
-        Debug.Log("Player calmed down :)");
-        // Disable minigame, resume normal gameplay, etc.
-        enabled = false;
     }
 }
