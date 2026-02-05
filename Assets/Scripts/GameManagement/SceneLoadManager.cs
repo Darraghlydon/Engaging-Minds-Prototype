@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public sealed class SceneLoadManager : MonoBehaviour
 {
+    private string _pendingActiveSceneName;
+
     public SceneRegistrySO sceneRegistry { get; set; }
 
     public bool IsLoading { get; private set; }
@@ -30,6 +33,11 @@ public sealed class SceneLoadManager : MonoBehaviour
         }
 
         IsLoading = true;
+        if (setActive)
+        {
+            _pendingActiveSceneName = sceneName;
+            SceneManager.sceneLoaded += SetActive;
+        }
 
         var mode = additive ? LoadSceneMode.Additive : LoadSceneMode.Single;
         var op = SceneManager.LoadSceneAsync(sceneName, mode);
@@ -43,14 +51,23 @@ public sealed class SceneLoadManager : MonoBehaviour
         while (!op.isDone)
             yield return null;
 
-        if (setActive)
-        {
-            var loaded = SceneManager.GetSceneByName(sceneName);
-            if (loaded.IsValid() && loaded.isLoaded)
-                SceneManager.SetActiveScene(loaded);
-        }
-
+        CleanupSceneLoadedHook();
         IsLoading = false;
+    }
+
+    private void SetActive(Scene scene, LoadSceneMode _)
+    {
+        if (!string.IsNullOrEmpty(_pendingActiveSceneName) &&
+                scene.name == _pendingActiveSceneName)
+        {
+            SceneManager.SetActiveScene(scene);
+        }
+    }
+
+    private void CleanupSceneLoadedHook()
+    {
+        SceneManager.sceneLoaded -= SetActive;
+        _pendingActiveSceneName = null;
     }
 
     public IEnumerator Unload(SceneId id)

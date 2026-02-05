@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     public event Action<RunState> RunStateChanged;
     private RunState _lastRunState;
 
-
     public static Action ResetGameSession;
 
     public event Action<bool> PauseChanged;
@@ -55,13 +54,11 @@ public class GameManager : MonoBehaviour
             return RunState.Playing;
         }
     }
-
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -94,6 +91,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        LevelSceneReady += CheckLevelState;
+    }
+    private void OnDisable()
+    {
+        LevelSceneReady -= CheckLevelState;
+    }
+
+    private void CheckLevelState(LevelState state)
+    {
+        if (CurrentLevelState == LevelState.Office)
+        {
+            DialogManager.Instance.TryTriggerGameOverIfInOffice();
+        }
+    }
+
     private void Start()
     {
         _lastRunState = CurrentRunState;
@@ -108,6 +122,8 @@ public class GameManager : MonoBehaviour
         if (!_pauseAction.WasPerformedThisFrame()) return;
 
         if (IsLoading) return;
+
+        if (CurrentLevelState == LevelState.Minigame1) return;
 
         if (IsPaused) ExitPause();
         else EnterPause();
@@ -135,9 +151,6 @@ public class GameManager : MonoBehaviour
     {
         // unload office
         yield return StartCoroutine(sceneLoadManager.Unload(SceneId.Main));
-
-        if (minigameId == SceneId.MiniGame1)
-            yield return StartCoroutine(sceneLoadManager.Unload(SceneId.MiniGame1));
 
         // load requested minigame
         yield return StartCoroutine(sceneLoadManager.Load(minigameId, additive: true, setActive: true));
@@ -174,15 +187,7 @@ public class GameManager : MonoBehaviour
         SetLoading(false);
         LevelSceneReady?.Invoke(CurrentLevelState);
         _isSessionTransitioning = false;
-
-        //TODO: Remove after
-        if (CurrentLevelState == LevelState.Minigame1 || CurrentLevelState == LevelState.Minigame2)
-        {
-            StartCoroutine(ReturnToOfficeScene());
-        }
     }
-
-
 
     private void SetLoading(bool loading)
     {
@@ -194,18 +199,9 @@ public class GameManager : MonoBehaviour
     {
         if (_persistentUiLoaded) yield break;
 
-        yield return StartCoroutine(sceneLoadManager.Load(SceneId.PersistentUI));
+        yield return StartCoroutine(sceneLoadManager.Load(SceneId.PersistentUI, true, false));
 
         _persistentUiLoaded = true;
-    }
-
-
-    private IEnumerator ReturnToOfficeScene()
-    {
-        yield return new WaitForSeconds(2f);
-        SetLevelState(LevelState.Office);
-        yield return new WaitForSeconds(1f);
-        DialogManager.Instance.TryTriggerGameOverIfInOffice();
     }
 
     private void NotifyRunStateMaybeChanged()
@@ -337,7 +333,6 @@ public enum LevelState
     Boot,
     Office,
     Minigame1,
-    Minigame2,
     Quitting
 }
 

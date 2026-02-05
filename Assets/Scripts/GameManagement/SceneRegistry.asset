@@ -18,6 +18,4 @@ MonoBehaviour:
   - id: 1
     sceneName: Office
   - id: 2
-    sceneName: Minigame1
-  - id: 3
-    sceneName: Minigame2
+    sceneName: Scenario1DevScene
