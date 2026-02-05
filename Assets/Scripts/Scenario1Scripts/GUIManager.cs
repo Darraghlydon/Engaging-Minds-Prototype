@@ -67,7 +67,7 @@ public class GUIManager : MonoBehaviour
         SetupNavigationForWebGL();
         Events.MaxStressReached.Subscribe(OnMaxStressReached);
         Events.MinStressReached.Subscribe(OnMinStressReached);
-        Events.DisplayBreathingGame.Unsubscribe(DisplayBreathingGame);
+        Events.DisplayBreathingGame.Subscribe(DisplayBreathingGame);
     }
 
     void OnDisable()
