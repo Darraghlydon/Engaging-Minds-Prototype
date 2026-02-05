@@ -41,20 +41,16 @@ public class MainMenuManager : MonoBehaviour
             {
                 // Start/Main Menu Buttons
                 case MainMenuButton.StartNewGame: buttonInfo.Button.onClick.AddListener(OnClickStart); break;
-                case MainMenuButton.QuitGame: buttonInfo.Button.onClick.AddListener(OnClickQuit); break;
 
                 // Pause Menu Buttons
                 case MainMenuButton.ResumeGame: buttonInfo.Button.onClick.AddListener(OnClickResume); break;
-                case MainMenuButton.QuitSession: buttonInfo.Button.onClick.AddListener(OnClickQuitSession); break;
+                case MainMenuButton.QuitSession: buttonInfo.Button.onClick.AddListener(OnClickQuit); break;
 
                 // Character Menu Buttons
                 case MainMenuButton.SubmitCharacter: buttonInfo.Button.onClick.AddListener(OnSubmitCharacterClicked); break;
 
                 // Values Menu Buttons
                 case MainMenuButton.SubmitValues: buttonInfo.Button.onClick.AddListener(OnSubmitValuesClicked); break;
-
-                // back button
-                case MainMenuButton.Back: buttonInfo.Button.onClick.AddListener(OnClickBack); break;
 
                 // retry button
                 case MainMenuButton.Retry: buttonInfo.Button.onClick.AddListener(OnClickReset); break;
@@ -77,10 +73,8 @@ public class MainMenuManager : MonoBehaviour
                 case MainMenuButton.StartNewGame: buttonInfo.Button.onClick.RemoveListener(OnClickStart); break;
                 case MainMenuButton.QuitGame: buttonInfo.Button.onClick.RemoveListener(OnClickQuit); break;
                 case MainMenuButton.ResumeGame: buttonInfo.Button.onClick.RemoveListener(OnClickResume); break;
-                case MainMenuButton.QuitSession: buttonInfo.Button.onClick.RemoveListener(OnClickQuitSession); break;
                 case MainMenuButton.SubmitCharacter: buttonInfo.Button.onClick.RemoveListener(OnSubmitCharacterClicked); break;
                 case MainMenuButton.SubmitValues: buttonInfo.Button.onClick.RemoveListener(OnSubmitValuesClicked); break;
-                case MainMenuButton.Back: buttonInfo.Button.onClick.RemoveListener(OnClickBack); break;
             }
         }
     }
@@ -139,8 +133,6 @@ public class MainMenuManager : MonoBehaviour
         GameManager.Instance.SubmitValuesAndPlay();
     }
     private void OnClickResume() => GameManager.Instance.Resume();
-    private void OnClickBack() => GameManager.Instance.ReturnToPreviousMenu();
-    private void OnClickQuitSession() => GameManager.Instance.QuitToMainMenu();
     private void OnClickQuit() => GameManager.Instance.QuitGame();
     private void OnClickReset() => GameManager.Instance.ResetSession();
 }
