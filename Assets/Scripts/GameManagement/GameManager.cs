@@ -177,9 +177,6 @@ public class GameManager : MonoBehaviour
             case LevelState.Minigame1:
                 yield return LoadMinigame(SceneId.MiniGame1);
                 break;
-            case LevelState.Quitting:
-                QuitGame();
-                break;
         }
 
         yield return null;
@@ -271,30 +268,18 @@ public class GameManager : MonoBehaviour
         SetMenuState(MenuScreen.None);
     }
 
-    internal void ReturnToPreviousMenu()
-    {
-        SetMenuState(previousMenuState);
-    }
-
-    internal void QuitToMainMenu()
-    {
-        SetMenuState(MenuScreen.MainMenuRoot);
-    }
-
     internal void QuitGame()
     {
-#if (UNITY_EDITOR)
-        UnityEditor.EditorApplication.isPlaying = false;
-#elif (!UNITY_EDITOR)
-                Application.Quit();
-#endif
         Debug.Log("Quitting");
+
+        ResetSession();
     }
 
     public void ResetSession()
     {
         ResetGameSession?.Invoke();
-        StartNewGameFlow();
+        ExitPause();
+        SetMenuState(MenuScreen.MainMenuRoot);
     }
 
     internal void Resume()
