@@ -19,7 +19,13 @@ public class Passenger : MonoBehaviour
     [SerializeField] private float _seatedTimeMin = 6f;
     [SerializeField] private float _seatedTimeMax = 15f;
 
+    [SerializeField] private GameObject _walkingVisual;
+    [SerializeField] private GameObject _seatedVisual;
+
+    public bool CanWalk => _agent != null && _walkingVisual != null;
+
     private NavMeshAgent _agent;
+
     private SeatManager _seatManager;
 
     private Transform _frontExit;
@@ -49,7 +55,7 @@ public class Passenger : MonoBehaviour
         seat = startSeat;
         state = State.Seated;
 
-        _agent.enabled = false;
+        SetSeated();
         transform.SetPositionAndRotation(seat.sitPoint.position, seat.sitPoint.rotation);
 
         StartCoroutine(SeatedRoutine());
@@ -60,6 +66,28 @@ public class Passenger : MonoBehaviour
         IsNoisy = noisy;
         if (speechBubble != null)
             speechBubble.SetActive(noisy);
+    }
+
+    public void SetSeated()
+    {
+        if (_seatedVisual != null)
+            _seatedVisual.SetActive(true);
+
+        if (_walkingVisual != null)
+            _walkingVisual.SetActive(false);
+
+        if (_agent != null)
+            _agent.enabled = false;
+    }
+
+
+    public void SetWalking()
+    {
+        if (_agent == null) return;
+
+        _walkingVisual.SetActive(true);
+        _seatedVisual.SetActive(false);
+        _agent.enabled = true;
     }
 
     public void Silence()
@@ -74,9 +102,12 @@ public class Passenger : MonoBehaviour
     }
     public void WalkToSeat(Seat targetSeat)
     {
+        if (!CanWalk) return;
         seat = targetSeat;
         state = State.WalkingToSeat;
 
+        SetWalking();
+        Debug.Log("Walking");
         if (!_agent.enabled) _agent.enabled = true;
         _agent.isStopped = false;
         _agent.SetDestination(seat.approachPoint.position);
@@ -93,7 +124,7 @@ public class Passenger : MonoBehaviour
         }
         else if (state == State.Leaving && _agent.enabled && !_agent.pathPending)
         {
-            if (_agent.remainingDistance <= _agent.stoppingDistance + 0.2f)
+            if (_agent.remainingDistance <= _agent.stoppingDistance + 0.1f)
             {
                 Destroy(gameObject); // or return to pool
             }
@@ -108,6 +139,7 @@ public class Passenger : MonoBehaviour
         _agent.enabled = false;
 
         transform.SetPositionAndRotation(seat.sitPoint.position, seat.sitPoint.rotation);
+        SetSeated();
         StartCoroutine(SeatedRoutine());
     }
 
@@ -129,23 +161,31 @@ public class Passenger : MonoBehaviour
 
     private void LeaveViaRandomExit()
     {
-
         // Remove from active count immediately
         _spawner?.Unregister(this);
         OnBeginLeaving();
 
         // Free the seat
         if (_seatManager != null && seat != null)
+        {
             _seatManager.ReleaseSeat(seat, this);
+            seat = null;
+        }
 
-        seat = null;
         state = State.Leaving;
 
-        if (!_agent.enabled) _agent.enabled = true;
-        _agent.isStopped = false;
+        if (CanWalk)
+        {
+            SetWalking();
+            _agent.isStopped = false;
 
-        Transform exit = GetRandomExit();
-        _agent.SetDestination(exit.position);
+            Transform exit = GetRandomExit();
+            _agent.SetDestination(exit.position);
+        }
+        else
+        {
+            //Destroy(gameObject);
+        }
     }
 
     private Transform GetRandomExit()
