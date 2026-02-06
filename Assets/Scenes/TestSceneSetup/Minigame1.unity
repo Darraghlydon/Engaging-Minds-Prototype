@@ -811,7 +811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8f0d109a68a4b4396a53e824cb3e9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassengerSpawner
-  _minPassengersToKeep: 16
+  _minPassengersToKeep: 18
   _seatManager: {fileID: 1381763616}
   _noiseManager: {fileID: 820786731}
   _frontSpawn: {fileID: 331894568}
