@@ -75,7 +75,6 @@ public class StressLevelController : MonoBehaviour
     {
         CurrentStress = Mathf.Clamp(value, 0, _maxStress);
         if (!_initialized) return;
-        Debug.Log("Current Stress: " + CurrentStress);
         _targetFill = (_maxStress <= 0) ? 0f : (float)CurrentStress / _maxStress;
         float normalized = (_maxStress <= 0) ? 0f : (float)CurrentStress / _maxStress;
         StartCoroutine(AnimateFill(_displayFill, _targetFill));

@@ -54,14 +54,11 @@ public class BreathingMiniGame : MonoBehaviour
 
             float distance = Mathf.Abs(featherPos - playerPos);
 
-            //float match = Mathf.InverseLerp(0.4f, 0f, distance);
-            Debug.Log(distance);
             bool isMatching = distance <= successRange;
             float dt = Time.unscaledDeltaTime;
 
             if (isMatching)
             {
-                Debug.Log("Matching");
                 cursor.SetColor(matchColor);
                 calmValue += calmGainRate * dt;
 
@@ -77,7 +74,6 @@ public class BreathingMiniGame : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not Matching");
                 cursor.SetColor(mismatchColor);
                 calmValue -= calmLossRate * Time.unscaledDeltaTime;
 

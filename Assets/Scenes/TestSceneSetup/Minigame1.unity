@@ -811,16 +811,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8f0d109a68a4b4396a53e824cb3e9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassengerSpawner
-  _minPassengersToKeep: 12
+  _minPassengersToKeep: 16
   _seatManager: {fileID: 1381763616}
   _noiseManager: {fileID: 820786731}
   _frontSpawn: {fileID: 331894568}
   _backSpawn: {fileID: 44275378}
   _frontExit: {fileID: 1526061316}
   _backExit: {fileID: 187891397}
-  startSeatedCount: 14
-  _spawnIntervalMin: 10
-  _spawnIntervalMax: 11
+  startSeatedCount: 20
+  _spawnIntervalMin: 20
+  _spawnIntervalMax: 30
   _characters:
   - characterId: 1
     passengerPrefab: {fileID: 2553590920076054420, guid: 40d050aa37046124bbd3afdff5e67a37, type: 3}
@@ -2055,7 +2055,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &663926068
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5223,12 +5223,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1439077241}
   m_Layer: 0
-  m_Name: SeatsNew
+  m_Name: Seats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1439077241
 Transform:
   m_ObjectHideFlags: 0
@@ -5596,7 +5596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1595761051
 RectTransform:
   m_ObjectHideFlags: 0

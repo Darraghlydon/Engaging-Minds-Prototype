@@ -38,6 +38,8 @@ public class Passenger : MonoBehaviour
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        if (_agent != null)
+            _agent.enabled = false;
         speechBubble.SetActive(false);
     }
 

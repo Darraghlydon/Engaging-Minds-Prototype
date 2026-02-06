@@ -69,9 +69,6 @@ public class PassengerSpawner : MonoBehaviour
         }
     }
 
-    // ----------------------------------------------------
-    // WALK-IN SPAWNING (only characters that can walk)
-    // ----------------------------------------------------
     private void TrySpawnOne()
     {
         if (_seatManager.FreeSeatCount <= 0)
@@ -108,10 +105,6 @@ public class PassengerSpawner : MonoBehaviour
         p.WalkToSeat(seat);
     }
 
-
-    // ----------------------------------------------------
-    // STARTING SEATED PASSENGERS (all characters allowed)
-    // ----------------------------------------------------
     private void SpawnStartingSeatedPassengers()
     {
         int count = Mathf.Clamp(startSeatedCount, 0, _seatManager.FreeSeatCount);
@@ -137,10 +130,6 @@ public class PassengerSpawner : MonoBehaviour
         }
     }
 
-
-    // ----------------------------------------------------
-    // CHARACTER SELECTION (shuffle-bag)
-    // ----------------------------------------------------
     private PassengerCharacterDefinition GetNextCharacter()
     {
         if (_unusedCharacters.Count == 0)
@@ -158,10 +147,6 @@ public class PassengerSpawner : MonoBehaviour
         return chosen;
     }
 
-
-    // ----------------------------------------------------
-    // CLEANUP
-    // ----------------------------------------------------
     private void CleanupFailedSpawn(Passenger p)
     {
         if (p == null) return;

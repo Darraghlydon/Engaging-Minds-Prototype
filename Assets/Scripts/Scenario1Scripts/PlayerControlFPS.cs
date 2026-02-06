@@ -55,7 +55,6 @@ public class PlayerControlFPS : MonoBehaviour
 
     void OnInteract(InputAction.CallbackContext context)
     {
-        Debug.Log("Interact!");
         _passengerInteractor.TryInteract();
     }
 
