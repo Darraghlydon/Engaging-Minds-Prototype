@@ -826,7 +826,7 @@ MonoBehaviour:
     passengerPrefab: {fileID: 2553590920076054420, guid: 40d050aa37046124bbd3afdff5e67a37, type: 3}
   - characterId: 4
     passengerPrefab: {fileID: 4075272207941278893, guid: 569bd434cc9af94469bdaa0e47557041, type: 3}
-  - characterId: 5
+  - characterId: 
     passengerPrefab: {fileID: 2965428958695847236, guid: c28176b0f7c73ce46ac2fbb8e4d8ae72, type: 3}
   - characterId: 6
     passengerPrefab: {fileID: 6555910151671156995, guid: d1587129999317d478b54f1bf64088fa, type: 3}
@@ -5997,6 +5997,10 @@ PrefabInstance:
     - target: {fileID: 2117017957259043329, guid: 05ae9a92ac5093c47959d61a13e525fe, type: 3}
       propertyPath: m_Name
       value: TrainStationEnvironment
+      objectReference: {fileID: 0}
+    - target: {fileID: 2117017957259043329, guid: 05ae9a92ac5093c47959d61a13e525fe, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2117345282836835144, guid: 05ae9a92ac5093c47959d61a13e525fe, type: 3}
       propertyPath: m_Intensity

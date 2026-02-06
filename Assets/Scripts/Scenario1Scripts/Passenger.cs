@@ -163,11 +163,15 @@ public class Passenger : MonoBehaviour
 
     private void LeaveViaRandomExit()
     {
+        // If the passenger cannot walk, they should NOT leave
+        if (!CanWalk)
+            return;
+
         // Remove from active count immediately
         _spawner?.Unregister(this);
         OnBeginLeaving();
 
-        // Free the seat
+        // Free the seat ONLY if they can walk
         if (_seatManager != null && seat != null)
         {
             _seatManager.ReleaseSeat(seat, this);
@@ -176,18 +180,11 @@ public class Passenger : MonoBehaviour
 
         state = State.Leaving;
 
-        if (CanWalk)
-        {
-            SetWalking();
-            _agent.isStopped = false;
+        SetWalking();
+        _agent.isStopped = false;
 
-            Transform exit = GetRandomExit();
-            _agent.SetDestination(exit.position);
-        }
-        else
-        {
-            //Destroy(gameObject);
-        }
+        Transform exit = GetRandomExit();
+        _agent.SetDestination(exit.position);
     }
 
     private Transform GetRandomExit()

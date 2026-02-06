@@ -12,6 +12,7 @@ public class Seat : MonoBehaviour
     {
         if (IsOccupied) return false;
         occupant = p;
+        Debug.Log($"Seat {name} claimed by {p.name}");
         return true;
     }
 

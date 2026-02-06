@@ -34,15 +34,22 @@ public class SeatManager : MonoBehaviour
 
     public bool TryClaimRandomSeat(Passenger p, out Seat seat)
     {
-        var free = seats.Where(s => !s.IsOccupied).ToList();
-        if (free.Count == 0)
+        var freeSeats = seats.Where(s => !s.IsOccupied).ToList();
+
+        while (freeSeats.Count > 0)
         {
-            seat = null;
-            return false;
+            int index = Random.Range(0, freeSeats.Count);
+            seat = freeSeats[index];
+
+            if (seat.TryClaim(p))
+                return true;
+
+            // Seat was taken between selection and claim
+            freeSeats.RemoveAt(index);
         }
 
-        seat = free[Random.Range(0, free.Count)];
-        return seat.TryClaim(p);
+        seat = null;
+        return false;
     }
 
     public void ReleaseSeat(Seat seat, Passenger p)
