@@ -263,6 +263,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6261b121da5d5544297f282c41f067d9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5297208537420435084}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6261b121da5d5544297f282c41f067d9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1471376640633464956}
   m_SourcePrefab: {fileID: 100100000, guid: 6261b121da5d5544297f282c41f067d9, type: 3}
 --- !u!4 &2308435335374558098 stripped
 Transform:
@@ -296,3 +299,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1471376640633464956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3117305785169053992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ebe171eae10c5c429370684e21de84a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RandomizeAnimatorStart
+  _stateName: Idle
+  _layer: 0
