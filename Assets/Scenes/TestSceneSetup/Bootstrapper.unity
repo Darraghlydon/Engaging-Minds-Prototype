@@ -165,6 +165,99 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   dialogAsset: {fileID: 4900000, guid: 7717115108e113840beaa8d9916ca2bf, type: 3}
   completedInkDialogAsset: {fileID: 4900000, guid: 4043935e9fba36549a2f67a6c9ee5865, type: 3}
+--- !u!1001 &1280708644
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 125676949006574548, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 125676949006574548, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 125676949006574548, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 125676949006574548, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.102
+      objectReference: {fileID: 0}
+    - target: {fileID: 125676949006574548, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.008
+      objectReference: {fileID: 0}
+    - target: {fileID: 125676949006574548, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1413227677441284133, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_fontSize
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1413227677441284133, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2372990698028706748, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.8553185
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -54.56619
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -13.534376
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989667511812049163, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622234810740956302, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
+      propertyPath: m_Name
+      value: Speech Bubble
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f2a994e1688d04143bd5777eb40bb866, type: 3}
 --- !u!1 &1333091954
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +360,6 @@ MonoBehaviour:
   - {fileID: 257200144, guid: 3a9f14574c3a09e4090c910798564dd1, type: 3}
   valuesJson: {fileID: 4900000, guid: 47d35da87b34a7047b62cb8fb0227502, type: 3}
   iconRegistry: {fileID: 11400000, guid: f00a4d79d69d9e34cbc2774e77a40b76, type: 2}
-  selectedValues: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -275,3 +367,4 @@ SceneRoots:
   - {fileID: 1333091956}
   - {fileID: 1334310117}
   - {fileID: 972625735}
+  - {fileID: 1280708644}
